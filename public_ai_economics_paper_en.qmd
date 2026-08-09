@@ -1,0 +1,347 @@
+---
+title: "Public AI as Social Infrastructure"
+subtitle: "A Heterogeneous-Agent Model of Access, Occupational Reallocation, and Economic Polarization"
+author: "Nak Cho Choi"
+date: "2026-08-09"
+lang: en
+bibliography: references.bib
+format:
+  html:
+    theme: cosmo
+    css: report-print.css
+    embed-resources: true
+    toc: true
+    number-sections: true
+---
+
+> **Working-paper status and interpretation.** This paper presents a calibrated computational thought experiment, not an empirical estimate of Korea or any other economy. Agents, parameters, and policy costs are synthetic. Quantitative magnitudes should not be interpreted as forecasts or causal effects. The contribution is to identify mechanisms, derive falsifiable comparative statics, and define an empirical research agenda.
+
+# Abstract
+
+This paper studies whether a universal public or sovereign artificial-intelligence service can limit the distributional consequences of rapid AI adoption. I develop a finite-horizon heterogeneous-agent transition model in which households differ in initial labor income, skills, AI-capital ownership, occupational exposure, adaptability, care burdens, trust, and ability to purchase premium AI. Effective AI use depends jointly on physical access, model quality, trust, skills, and occupational flexibility. AI can augment labor, displace tasks, increase returns to capital, reduce care-related barriers to employment, and generate cumulative advantages through dynamic feedback.
+
+The model compares a market benchmark with five public-AI regimes: universal access, access plus public education, access plus AI-enabled care, a comprehensive public option, and a low-quality implementation. In the baseline calibration, universal access reduces the increase in the Wolfson polarization index by 11.4 percent relative to the market benchmark, while education and the comprehensive package reduce it by 23.5 and 29.0 percent. Yet polarization continues to rise under every realistic baseline regime because premium-model quality, skill complementarity, occupational reallocation, and unequal capital ownership continue to favor initially advantaged agents. A 3,600-run Monte Carlo exercise introduces uncertainty in premium quality, reallocation speed, AI-capital returns, dynamic feedback, and the marginal resource cost of public provision. Public AI plus education lowers polarization in every sampled environment and raises net equally distributed equivalent income in 59.0 percent; the comprehensive package lowers polarization in every environment but raises net output in only 43.5 percent because it is more costly. The results imply that universal access is a necessary infrastructure layer, not a sufficient distributional policy. Effective equalization requires compensatory design, adaptive education, targeted care, and broader ownership of AI capital.
+
+**Keywords:** artificial intelligence; public option; sovereign AI; inequality; polarization; occupational reallocation; education; digital public infrastructure  
+**JEL codes:** D31, H41, I24, J24, O33
+
+# Introduction
+
+Generative AI is unusual among general-purpose technologies because a basic interface can diffuse almost instantly while frontier capability remains scarce, metered, and complementary with private data, organizational capital, and human expertise. This creates a two-layer distributional problem. The first layer is familiar: unequal access to devices, connectivity, and software. The second is more consequential: unequal access to model quality, inference budgets, proprietary data, workflow integration, and the human capital required to convert a model output into economic value.
+
+Recent OECD data illustrate the first layer. In 2025, the difference in individual generative-AI use across age groups was 53.6 percentage points, while gaps by educational attainment and income were approximately 21 percentage points [@oecdaiuse2026]. The second layer is harder to observe but central to policy. The most capable systems are increasingly paywalled, and equal access to a generic interface does not imply equal effective capability. The World Bank's framework for AI readiness similarly emphasizes four complementary inputs—connectivity, compute, context, and competency—rather than connectivity alone [@worldbankdpi2026].
+
+These facts motivate a policy proposal analogous to public broadband or digital public infrastructure: a universal public or sovereign AI option. Such a system could provide a minimum capability floor, support public administration, deliver curriculum-aligned tutoring, and help vulnerable households navigate health and social-protection systems. Public AI need not mean a single state-controlled chatbot. It can instead be a publicly financed entitlement delivered through interoperable public, private, open, and on-device models. OECD evidence on government AI already points toward mixed commercial and sovereign architectures rather than a single infrastructure model [@oecdgov2026].
+
+The central question is whether such access is sufficient to prevent AI-driven polarization. The answer is not obvious. A public option may raise the productivity of disadvantaged workers, reduce care barriers, and broaden adoption. It may also be costly, poorly trusted, politically captured, or technologically inferior. Meanwhile, high-income households may purchase superior models and combine them with more skills and capital. If AI raises the return to capital, universal access may reduce wage inequality while wealth inequality continues to rise [@rockall2025].
+
+This paper makes four contributions. First, it formalizes the distinction between nominal access and effective AI use. Second, it integrates task displacement, human-capital accumulation, care constraints, premium AI, and AI-capital ownership in one transparent transition model. Third, it distinguishes inequality from polarization by reporting the Gini, Atkinson, Wolfson, middle-income share, and capital concentration. Fourth, it evaluates policy robustness across uncertain technology and public-cost environments rather than presenting one preferred calibration.
+
+The main result is conditional. Public AI robustly attenuates polarization in the model, but access-only provision does not reverse it. Education performs better because it changes the ability to use AI rather than merely the probability of access. Care services improve employment among vulnerable agents but have smaller aggregate distributional effects. A comprehensive package delivers the largest reduction in polarization and capital concentration, but its net efficiency ranking depends on implementation cost. A separate ideal-boundary experiment shows that polarization reverses only when public AI is strongly compensatory—providing substantially larger marginal productivity gains to initially low-capability agents—and when the premium-quality and occupational-displacement channels are nearly absent.
+
+# Related Literature
+
+The model builds on the task approach to technological change. Automation can displace labor from tasks, while new tasks and productivity effects can reinstate labor demand [@autor2015]. Acemoglu and Restrepo attribute a substantial part of changes in wage inequality to task displacement and differential exposure [@acemoglu2021]. In the present model, occupational exposure is not itself a treatment; outcomes depend on exposure interacted with effective use and adaptation.
+
+AI differs from earlier automation because high-income cognitive occupations can be highly exposed while also being highly complementary with AI. An IMF task-based model shows that this can reduce wage inequality through displacement yet increase wealth inequality through capital returns and endogenous adoption [@rockall2025]. The present framework captures the same ambiguity in reduced form: an exposed agent may receive an augmentation gain, a displacement loss, or both.
+
+Field evidence also motivates an equalizing channel. Generative AI raised productivity more for less experienced customer-support workers in one large deployment [@brynjolfsson2023]. This does not establish a general law, but it shows that technology can be designed or deployed so that lower baseline capability receives a larger marginal gain. I represent that possibility with a compensatory-design parameter.
+
+The public-finance literature emphasizes uncertainty about AI growth, displacement, the labor share, and capital ownership. Robust policies may be preferable to point-optimal policies when the transition path is unknown [@dynan2026]. Korinek and Stiglitz argue that the distributional consequences of AI depend on property rights, market structure, and fiscal policy rather than technology alone [@korinek2019]. The simulations therefore evaluate both universal access and partial socialization of AI-capital income.
+
+Finally, the paper relates to digital public infrastructure and education. Shared digital identity, payments, and secure data exchange can expand access to public services, but benefits require trust, interoperability, privacy, and institutional capacity [@worldbankdpi2026; @oecdgov2026]. In education, general-purpose AI may improve submitted work without producing durable learning when pedagogical design is absent [@oecd2026]. This motivates treating public education as a state transition for human capital, not as an additional login credential.
+
+# Economic Environment
+
+## Households
+
+The economy contains (N) heterogeneous households indexed by (i) over discrete periods (t=0,\ldots,T). Each household has state
+
+\[
+s_{it}=(y_{it}^{L},h_{it},k_{it},e_i,f_i,b_{it},v_i,r_i),
+\]
+
+where (y^L) is labor income, (h\in[0,1]) is AI-relevant human capital, (k>0) is AI-complementary capital, (e\in[0,1]) is occupational AI exposure, (f\in[0,1]) is occupational flexibility, (b\in[0,1]) is a care or administrative burden, (v\in\{0,1\}) indicates vulnerability, and (r\in[0,1]) is the initial resource rank. Initial labor income and capital are lognormal and positively associated with the latent resource state. Skills and flexibility are correlated with the same state but retain idiosyncratic variation.
+
+Households may purchase a premium AI service. The probability of premium adoption is
+
+\[
+\Pr(P_i=1)=\Lambda(-4.2+7r_i),
+\]
+
+where (Lambda) is the logistic function. This reduced-form adoption rule captures affordability and organizational complementarity. It is not a demand system estimated from prices.
+
+## Effective AI services
+
+Nominal access and effective use are distinct. Let (X_{it}^{G}) indicate successful access to the public service and (P_i) premium adoption. AI quality is
+
+\[
+q_{it}=\begin{cases}
+1+\Delta_q, & P_i=1,\\
+q_G, & P_i=0,\ X_{it}^{G}=1,\\
+q_0, & \text{otherwise},
+\end{cases}
+\]
+
+where (Delta_q) is the premium-quality advantage, (q_G) public quality, and (q_0) the residual low-quality service. Public access succeeds with probability
+
+\[
+\Pr(X_{it}^{G}=1)=x_G\tau_G\tau_i,
+\]
+
+where (x_G) is nominal coverage, (	au_G) institutional trustworthiness, and (	au_i) household trust. Effective AI services are
+
+\[
+a_{it}=q_{it}\Lambda(-0.8+2.5h_{it}+1.2f_i).
+\tag{1}
+\]
+
+Equation (1) is the key distinction: universal nominal access does not equalize effective services if skills and flexibility remain unequal.
+
+## Labor augmentation, displacement, and care
+
+The growth rate of labor income is
+
+\[
+g_{it}=0.043e_i a_{it}(0.28+0.72h_{it})
++\chi e_iX_{it}^{G}(1-h_{it})(1-r_i)
+-\rho e_i(1-\mathcal{A}_{it})
++\gamma c_Gv_i(1-b_{it})+\phi g_{i,t-1},
+\tag{2}
+\]
+
+where (chi) is compensatory design, (ho) occupational-reallocation speed, (c_G) care-service intensity, (phi) dynamic feedback, and
+
+\[
+\mathcal{A}_{it}=0.42h_{it}+0.28f_i+0.30\min(a_{it},1)
+\]
+
+is adaptive capacity. Labor income evolves as (y_{i,t+1}^{L}=y_{it}^{L}\exp(g_{it})), with bounded period growth for numerical stability.
+
+Public education changes human capital:
+
+\[
+h_{i,t+1}=\min\{1,h_{it}+\eta_G(1.15-r_i)(1-h_{it})+0.018a_{it}(1-h_{it})\}.
+\tag{3}
+\]
+
+The first term is explicitly progressive. It represents more intensive support for low-resource, low-skill agents. Care services reduce (b_{it}) and increase the probability of employment among vulnerable agents. High-risk decisions in health, law, and benefits are outside the model and should not be delegated without human review.
+
+## AI capital and household income
+
+AI-capital income is
+
+\[
+\pi_{it}=r_K k_{it}e_i\min(a_{it},1.5),
+\tag{4}
+\]
+
+where (r_K) is the return to AI-complementary capital. Capital evolves through depreciation, reinvested after-tax profit, a share of positive labor gains, and any worker-ownership grant. Total household income is
+
+\[
+y_{it}=y_{it}^{L}+\pi_{it}-T_{it}+D_{it}.
+\tag{5}
+\]
+
+The government taxes a share (	au_K) of AI-capital income and returns the revenue to households with progressive weights (omega_i\propto1.05-r_i):
+
+\[
+\sum_i D_{it}=\sum_i T_{it}=\tau_K\sum_i\pi_{it}.
+\tag{6}
+\]
+
+Equation (6) balances the redistributive account. Service provision has a separate real-resource cost:
+
+\[
+C_G=T\left[0.0035x_Gq_G^2+0.012\eta_G+0.010c_G+0.0015\omega_G\right],
+\tag{7}
+\]
+
+where (omega_G) is worker-ownership intensity. Net output and net equally distributed equivalent (EDE) income subtract (mC_G), where (m\in[0.5,4]) is a Monte Carlo marginal resource-cost multiplier. This is resource accounting, not a complete tax-incidence model.
+
+# Comparative Statics
+
+## Proposition 1: Universal access need not equalize outcomes
+
+**Proposition 1.** Suppose premium adoption and skills are increasing in initial resources, (partial P_i/\partial r_i>0) and (partial h_i/\partial r_i>0). If AI is skill-complementary and premium quality exceeds public quality, then setting public nominal coverage to one does not in general eliminate the resource gradient in AI augmentation.
+
+**Proof sketch.** From equations (1) and (2), labor augmentation is increasing in (q_i), (h_i), and their interaction. Universal public coverage removes the extensive access difference for nonpremium households but leaves premium quality and skill gradients intact. The derivative of augmentation with respect to (r_i) remains positive whenever the direct skill and premium-quality terms exceed the compensatory term (chi(1-h_i)(1-r_i)). Therefore equal access is not sufficient for equal marginal returns. (square)
+
+## Proposition 2: A compensatory-design threshold exists
+
+**Proposition 2.** Holding displacement and capital-income channels fixed, there exists a threshold (chi^*) above which the labor-augmentation gradient with respect to initial resources becomes nonpositive.
+
+**Proof sketch.** The resource derivative of equation (2)'s augmentation terms is continuous and decreasing in (chi). At (chi=0), the derivative is positive under complementarity. For sufficiently large (chi), the progressive term dominates because it is decreasing in (h_i) and (r_i). The intermediate value theorem yields a threshold. This proposition concerns labor augmentation, not total income: unequal capital ownership can preserve overall polarization even when the labor gradient reverses. (square)
+
+## Proposition 3: AI-enabled care has targeted labor-supply effects
+
+**Proposition 3.** If care burdens reduce employment and public care weakly lowers those burdens, then care AI weakly raises employment for vulnerable agents, with no direct effect for agents with (v_i=0).
+
+The proposition follows mechanically from the employment transition. Its empirical relevance depends on service take-up, error rates, human escalation, and whether saved administrative time translates into labor supply.
+
+## Proposition 4: Distributional dominance does not imply net efficiency dominance
+
+**Proposition 4.** A public option can lower polarization relative to the market benchmark while lowering net output when (mC_G) exceeds its gross productivity gain.
+
+This distinction motivates reporting polarization, gross output, net output, and EDE income separately.
+
+# Calibration and Computational Design
+
+The baseline is a normalized calibration designed for mechanism comparison. It is not matched to Korean moments.
+
+| Object | Baseline | Monte Carlo range | Interpretation |
+|---|---:|---:|---|
+| Agents | 1,400 | 900 in robustness | Synthetic households per run |
+| Horizon | 15 | 12 in robustness | Model periods |
+| Premium quality gap (Delta_q) | 0.45 | 0.05–1.05 | Frontier advantage |
+| Reallocation speed (ho) | 0.045 | 0.01–0.10 | Task-displacement pressure |
+| AI-capital return (r_K) | 0.065 | 0.02–0.11 | Return to AI-complementary capital |
+| Dynamic feedback (phi) | 0.18 | -0.05–0.35 | Persistence of prior gains |
+| Public-cost multiplier (m) | 1 | 0.5–4.0 | Procurement and fiscal efficiency |
+| Baseline seeds | 40 | 3 per parameter draw | Idiosyncratic population variation |
+
+Six policy regimes are evaluated.
+
+1. **Market / premium AI:** residual low-quality access and resource-skewed premium adoption.
+2. **Universal public AI:** high nominal coverage with moderate public quality.
+3. **Public AI plus education:** progressive human-capital investment.
+4. **Public AI plus care:** targeted reduction in care and administrative burdens.
+5. **Comprehensive public option:** access, education, care, AI-capital dividend, and worker ownership.
+6. **Low-quality public AI:** broad nominal coverage with low quality and trust.
+
+The baseline comprises 240 policy runs. Two additional grids examine 600 premium-gap/reallocation combinations and 288 ideal-boundary combinations. The global robustness exercise contains 200 random parameter environments, three seeds, and six policies, for 3,600 runs. All comparisons are paired within the same environment and seed.
+
+Outcomes include the Gini coefficient, Atkinson index with inequality aversion (epsilon=1), EDE income, Wolfson polarization, the share within 75–125 percent of median income, vulnerable-group employment, the skill gap, and the top-decile share of AI capital.
+
+# Baseline Results
+
+## Dynamic distributional effects
+
+![](results/economics_robustness_full/01_dynamics_en.png){fig-alt="Dynamic paths of Wolfson polarization, middle-income share, AI capability gap, and top-decile AI-capital share across six policy regimes" width=100%}
+
+The market benchmark produces the fastest increase in polarization and AI-capital concentration. Universal access attenuates both but leaves most of the skill gradient intact. Education and the comprehensive option sharply reduce the capability gap because education is targeted toward initially low-resource agents. The comprehensive option also slows capital concentration through progressive dividends and ownership grants.
+
+| Policy | Δ Wolfson | Δ Atkinson | Fiscal cost | Δ net output | Δ net EDE | Vulnerable employment |
+|---|---:|---:|---:|---:|---:|---:|
+| Market / premium AI | +0.1105 | +0.0969 | 0.0000 | +0.0464 | -0.0756 | -0.99 pp |
+| Universal public AI | +0.0979 | +0.0870 | 0.0267 | +0.0599 | -0.0587 | -0.93 pp |
+| Public AI + education | +0.0845 | +0.0738 | 0.0463 | +0.1133 | -0.0035 | +2.05 pp |
+| Public AI + care | +0.0954 | +0.0848 | 0.0426 | +0.0573 | -0.0614 | +2.46 pp |
+| Comprehensive public option | +0.0784 | +0.0685 | 0.0664 | +0.1162 | +0.0020 | +5.49 pp |
+| Low-quality public AI | +0.1065 | +0.0926 | 0.0153 | +0.0543 | -0.0676 | +0.85 pp |
+
+Gross mean income rises under every regime, but market EDE income falls. This divergence means that aggregate growth is not sufficient to improve inequality-adjusted welfare in the model. Only the comprehensive package produces positive net EDE income at the baseline cost, and its margin is small.
+
+## Incidence across the initial-resource distribution
+
+![](results/economics_robustness_full/02_quintile_incidence_en.png){fig-alt="Mean log-income changes by initial-resource quintile across selected policy regimes" width=95%}
+
+All realistic baseline policies retain a positive resource gradient: top-quintile agents gain most, while the bottom quintile loses. Public education and the comprehensive option shift the entire incidence schedule upward, but do not reverse its slope. Thus AI can simultaneously raise mean productivity and deepen distributional segmentation.
+
+## Efficiency and polarization
+
+![](results/economics_robustness_full/03_frontier_en.png){fig-alt="Efficiency-polarization frontier with marker size showing vulnerable-group employment gains" width=92%}
+
+Before introducing uncertainty in public cost, the comprehensive option occupies the most favorable gross-output/polarization location. This is not a general dominance result. The Monte Carlo exercise below shows that cost uncertainty materially changes the net-output ranking.
+
+# Threshold Experiments
+
+## Premium quality and occupational reallocation
+
+![](results/economics_robustness_full/04_phase_en.png){fig-alt="Heat maps of changes in Wolfson polarization over premium-quality gaps and occupational-reallocation speeds" width=100%}
+
+Polarization increases with both premium quality and reallocation speed. The comprehensive option reduces the level at every grid point but does not eliminate polarization in the high-gap, high-reallocation region. Public provision therefore becomes less effective when education and labor-market adaptation lag behind frontier-model improvements.
+
+## The ideal compensatory boundary
+
+![](results/economics_robustness_full/05_prevention_en.png){fig-alt="Ideal-boundary heat map of polarization over compensatory design and recycled AI-capital income" width=90%}
+
+This experiment deliberately removes the premium-quality and occupational-reallocation shocks and strengthens public quality, education, and trust. Even then, greater capital-income recycling alone does not reverse polarization. Negative Wolfson changes appear only at the highest compensatory-design intensity. The units are arbitrary and should not be interpreted as a policy target. The experiment establishes a qualitative point: neutral access and lump-sum redistribution are weaker than technology designed to generate larger marginal productivity gains for initially disadvantaged users.
+
+# Global Robustness
+
+## Parameter sensitivity
+
+![](results/economics_robustness_full/06_sensitivity_en.png){fig-alt="Standardized associations of uncertain technology parameters with Wolfson polarization under market and comprehensive public AI" width=90%}
+
+Under the market benchmark, occupational-reallocation speed has the largest standardized association with polarization (0.694), followed by dynamic feedback (0.446) and the premium-quality gap (0.429). Under the comprehensive option, reallocation speed (0.576) and the premium gap (0.564) are nearly equally important. Capital returns have little standardized association with the Wolfson index in this parameterization, although capital returns still affect wealth concentration and EDE income. These coefficients summarize the simulated parameter space; they are not causal estimates.
+
+## Policy-effect distributions
+
+![](results/economics_robustness_full/07_effect_ecdf_en.png){fig-alt="Empirical cumulative distributions of policy effects on Wolfson polarization relative to the market benchmark" width=92%}
+
+| Policy | Lower polarization | Higher net output | Higher net EDE | Net-output & polarization improvement |
+|---|---:|---:|---:|---:|
+| Universal public AI | 100.0% | 27.5% | 33.0% | 27.5% |
+| Public AI + education | 100.0% | 53.5% | 59.0% | 53.5% |
+| Public AI + care | 100.0% | 19.0% | 22.5% | 19.0% |
+| Comprehensive public option | 100.0% | 43.5% | 45.5% | 43.5% |
+| Low-quality public AI | 99.5% | 27.5% | 28.0% | 27.5% |
+
+Every substantive public option reduces polarization in all 200 sampled environments. This robustness is partly structural: each policy expands effective services toward households that otherwise lack premium AI. Net efficiency is not structural because costs vary. Education has the highest probability of improving both net output and polarization, while care is targeted toward a smaller population and consequently has lower aggregate net-output dominance despite clear vulnerable-group benefits. The comprehensive package produces the largest median polarization reduction but is more sensitive to cost overruns.
+
+# Political Economy and Institutional Design
+
+The model does not justify a unitary state AI. A monopoly public model may introduce surveillance, political bias, slow procurement, and technological lock-in. Nor does a voucher-only system guarantee equity if private suppliers segment users by quality or extract sensitive public data. A durable public option should separate the **entitlement** from the **operator**.
+
+A plausible institutional architecture has five layers:
+
+1. A statutory minimum AI entitlement or compute credit.
+2. Choice among certified public, private, open-weight, and on-device models.
+3. Interoperability and data portability, with privacy-preserving processing for sensitive data.
+4. Independent evaluation of quality, security, bias, and distributional incidence.
+5. Human explanation, escalation, and appeal rights for consequential public decisions.
+
+This design may be more robust to electoral turnover than tying public access to a specific vendor or model. The entitlement and safeguards can remain stable while procurement and pedagogy adapt.
+
+# Empirical Identification Agenda
+
+The present model cannot determine whether a public AI program would work in practice. A credible empirical program would proceed in stages.
+
+**First, measure the premium gap.** A common task battery should compare free, public, and premium models for users with different baseline skills. Outcomes should include task completion, error detection, time, and unaided retention—not model benchmarks alone.
+
+**Second, randomize access and education separately.** A factorial trial should assign public-AI access, structured training, both, or neither. This identifies whether access changes outcomes and whether education changes the return to access. Removing AI during a later assessment can distinguish durable learning from temporary task outsourcing.
+
+**Third, evaluate care AI with administrative outcomes.** Eligible take-up, processing time, appeals, erroneous denials, and human escalation should be measured. Employment is secondary and should not be assumed to respond immediately.
+
+**Fourth, link occupational exposure to observed transitions.** Longitudinal labor data can estimate whether high-exposure workers change occupations, wages, hours, or training participation. Exposure is not randomly assigned; identification requires event studies, firm-level adoption timing, or valid instruments.
+
+**Fifth, measure ownership.** Household portfolios, pension exposure, employee ownership, and regional funds are necessary to identify the capital-income channel. Wage data alone may falsely suggest equalization while wealth concentration rises.
+
+All human-subject research requires ethics review before recruitment, informed consent, privacy protection, and pre-specified exclusion and outcome rules. Synthetic personas may help test survey instruments but cannot substitute for a representative human sample.
+
+# Limitations
+
+The paper has seven important limitations.
+
+1. It is a partial-equilibrium transition model. Wages, prices, firm entry, labor demand, and aggregate savings do not clear in equilibrium.
+2. Premium adoption is a reduced-form function of initial resources rather than a price-sensitive choice.
+3. Public-service cost is a normalized resource cost, not a full government budget with distortionary taxation.
+4. Policy quality, trust, and targeting are assumed rather than estimated.
+5. The simulated population is synthetic and is not calibrated to Korean joint distributions.
+6. The Wolfson and Atkinson results depend on the chosen income definition and finite horizon.
+7. Monte Carlo robustness shows stability within the specified model family, not external validity.
+
+These limitations imply that the paper should be read as theory-assisted policy design. Its quantitative findings discipline intuition, expose hidden assumptions, and identify empirical thresholds. They do not rank actual programs.
+
+# Conclusion
+
+Universal public AI can reduce the first-order access gap, but access equality is not outcome equality. When frontier quality, skills, organizational flexibility, and AI-capital ownership are positively associated with initial resources, a universal login leaves the main gradient of economic returns intact. The model therefore predicts that a market with low-quality free AI for the poor and premium AI plus private data and capital for the rich can increase output while hollowing out the middle.
+
+The most robust modeled intervention is not access alone but access combined with adaptive public education. A comprehensive package generates the largest distributional gains and vulnerable-group employment effects, but its net efficiency is sensitive to cost. Pure capital-income recycling is weaker than compensatory design unless it changes ownership at scale or is combined with human-capital formation.
+
+The policy objective should therefore be a public AI option that increases the capabilities, time, bargaining power, and capital claims of initially disadvantaged users—not merely a cheaper chatbot. Whether such a system can be delivered at acceptable cost is an empirical question. The model provides the hypotheses and measurement framework required to answer it.
+
+# Reproducibility Appendix
+
+- Core model: `scripts/07_public_ai_policy_simulation.py`
+- Robustness code: `scripts/08_economics_robustness.py`
+- Unit tests: `tests/test_public_ai_policy.py`
+- Baseline outputs: `results/public_ai_full4/`
+- Robustness outputs: `results/economics_robustness_full/`
+- Publication-scope model tests: 4 (the broader development workspace passed 17 tests before repository extraction)
+- Baseline and threshold runs: 1,128
+- Monte Carlo runs: 3,600
+- Total computational experiments used in this paper: 4,728
+
+# References

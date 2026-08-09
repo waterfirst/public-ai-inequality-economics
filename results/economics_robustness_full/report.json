@@ -1,0 +1,62 @@
+{
+  "parameter_specs": 200,
+  "seeds_per_spec": 3,
+  "runs": 3600,
+  "standardized_sensitivity": {
+    "Market / premium AI": {
+      "premium_gap": 0.4294101635638094,
+      "rearrangement_speed": 0.6941205406875076,
+      "capital_return": 0.018087710356126857,
+      "feedback": 0.44631967961098473
+    },
+    "Comprehensive public option": {
+      "premium_gap": 0.5635037015108658,
+      "rearrangement_speed": 0.5761931112903411,
+      "capital_return": -0.007964028225672104,
+      "feedback": 0.42234852429136965
+    }
+  },
+  "policy_robustness": [
+    {
+      "policy": "Low-quality public AI",
+      "share_lower_polarization": 0.995,
+      "share_higher_output": 0.275,
+      "share_higher_ede": 0.28,
+      "share_pareto_output_polarization": 0.275,
+      "median_wolfson_effect": -0.0037986881321602634
+    },
+    {
+      "policy": "Comprehensive public option",
+      "share_lower_polarization": 1.0,
+      "share_higher_output": 0.435,
+      "share_higher_ede": 0.455,
+      "share_pareto_output_polarization": 0.435,
+      "median_wolfson_effect": -0.030247068989260873
+    },
+    {
+      "policy": "Public AI + education",
+      "share_lower_polarization": 1.0,
+      "share_higher_output": 0.535,
+      "share_higher_ede": 0.59,
+      "share_pareto_output_polarization": 0.535,
+      "median_wolfson_effect": -0.024474372533567768
+    },
+    {
+      "policy": "Public AI + care",
+      "share_lower_polarization": 1.0,
+      "share_higher_output": 0.19,
+      "share_higher_ede": 0.225,
+      "share_pareto_output_polarization": 0.19,
+      "median_wolfson_effect": -0.014831136018367476
+    },
+    {
+      "policy": "Universal public AI",
+      "share_lower_polarization": 1.0,
+      "share_higher_output": 0.275,
+      "share_higher_ede": 0.33,
+      "share_pareto_output_polarization": 0.275,
+      "median_wolfson_effect": -0.011483175991522085
+    }
+  ],
+  "claim": "model robustness only; not empirical identification"
+}

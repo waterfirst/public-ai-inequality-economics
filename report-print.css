@@ -1,0 +1,26 @@
+@page {
+  size: A4;
+  margin: 16mm 14mm 17mm;
+}
+
+@media print {
+  body {
+    font-family: "Noto Sans CJK KR", "NanumGothic", sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.55;
+  }
+  h1, h2, h3, figure, table, blockquote {
+    break-inside: avoid;
+  }
+  img {
+    max-height: 225mm;
+    object-fit: contain;
+  }
+  #TOC {
+    display: none;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
