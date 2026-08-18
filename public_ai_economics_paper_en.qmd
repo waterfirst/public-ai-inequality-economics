@@ -51,6 +51,10 @@ The public-finance literature emphasizes uncertainty about AI growth, displaceme
 
 Finally, the paper relates to digital public infrastructure and education. Shared digital identity, payments, and secure data exchange can expand access to public services, but benefits require trust, interoperability, privacy, and institutional capacity [@worldbankdpi2026; @oecdgov2026]. In education, general-purpose AI may improve submitted work without producing durable learning when pedagogical design is absent [@oecd2026]. This motivates treating public education as a state transition for human capital, not as an additional login credential.
 
+Korean evidence sharpens the distinction between exposure and complementarity. The Bank of Korea estimates that 51 percent of workers are in high-AI-exposure occupations: 24 percent in high-exposure, high-complementarity work and 27 percent in high-exposure, low-complementarity work [@bokai2025]. Its representative household survey reports 63.5 percent generative-AI use, 51.8 percent work use, and a 3.8 percent average reduction in work time, while documenting strong demographic and occupational gradients [@bokproductivity2025]. A separate study finds that early-career employment contracted more in highly exposed industries where junior codified tasks were easier to automate [@bokyouth2025]. These facts motivate a Korea extension with age-specific displacement and occupational mobility rather than a single national adoption parameter.
+
+The extension also uses NVIDIA's `Nemotron-Personas-Korea` as a synthetic stratification stress test [@nvidia2026]. The dataset contains one million records and seven million Korean-language personas with adult age, sex, education, occupation, and 17-province context. It is not a survey. Its data card explicitly documents independence assumptions among demographic inputs, and recent audit evidence warns that marginal alignment does not establish joint-distribution fidelity [@bae2026]. Accordingly, the model uses only anonymized aggregate strata and treats official Korean joint tables and panel data as the empirical validation target.
+
 # Economic Environment
 
 ## Households
@@ -97,6 +101,23 @@ a_{it}=q_{it}\Lambda(-0.8+2.5h_{it}+1.2f_i).
 \]
 
 Equation (1) is the key distinction: universal nominal access does not equalize effective services if skills and flexibility remain unequal.
+
+### Network diffusion and social-physics extension
+
+Households are embedded in a weighted social-learning network (G=(V,E)), following the generative logic of agent-based social science and the econophysics tradition of deriving distributional regularities from interacting heterogeneous units [@epstein1999; @bouchaud2000]. Let (w_{ij}) denote normalized ties based on region, occupation, and resource similarity. Adoption and human capital receive peer terms,
+
+\[
+p_{i,t+1}=\operatorname{clip}\left[p_{it}+\delta X_{it}^{G}+\lambda\sum_jw_{ij}(p_{jt}-p_{it}),0,1\right],
+\tag{1a}
+\]
+
+\[
+h_{i,t+1}=\operatorname{clip}\left[h_{it}+\eta_G(1.15-r_i)(1-h_{it})
++\sigma\sum_jw_{ij}(h_{jt}-h_{it})+0.018a_{it}(1-h_{it}),0,1\right].
+\tag{1b}
+\]
+
+Here (\lambda) is social diffusion and (\sigma) is peer learning. Homophily can produce capability clusters: the same spillover that accelerates national adoption may amplify between-cluster inequality when disadvantaged agents mainly connect to other low-skill agents. Progressive education can instead seed high-return nodes inside those clusters. The browser laboratory exposes these mechanisms and visualizes the resulting network; the publication model treats them as hypotheses pending Korean network calibration.
 
 ## Labor augmentation, displacement, and care
 
@@ -213,6 +234,14 @@ The baseline comprises 240 policy runs. Two additional grids examine 600 premium
 
 Outcomes include the Gini coefficient, Atkinson index with inequality aversion (epsilon=1), EDE income, Wolfson polarization, the share within 75–125 percent of median income, vulnerable-group employment, the skill gap, and the top-decile share of AI capital.
 
+## Korea-calibrated extension and synthetic-persona protocol
+
+The Korea extension separates calibration targets into three tiers. Tier 1 uses official or representative moments: the Bank of Korea exposure/complementarity shares, generative-AI adoption and time-saving estimates, age-specific employment responses, KOSIS joint demographic tables, and KLIPS occupational transitions. Tier 2 uses administrative or survey microdata under their respective access rules. Tier 3 uses `Nemotron-Personas-Korea` only to generate synthetic strata and rare-subgroup stress tests.
+
+The NVIDIA preparation pipeline discards names and all narrative persona fields. It exports counts over age group, sex, region, education, and occupation. The simulator samples agents from those counts, then assigns economic states through transparent equations. This preserves provenance while preventing narrative personas from being mistaken for observed income, preferences, trust, or policy behavior. Every NVIDIA-based result must be accompanied by (i) the sampled record count, (ii) the dataset version and CC BY 4.0 attribution, (iii) comparison against Korean joint distributions, and (iv) a warning that the source is fully synthetic.
+
+The interactive extension adds three Korea-relevant parameters: a junior-career displacement shock for codified entry tasks, a noncapital-region penalty on effective rather than nominal access, and network learning. These parameters are exploratory until estimated. They allow falsifiable experiments about why high national AI use can coexist with widening returns to AI.
+
 # Baseline Results
 
 ## Dynamic distributional effects
@@ -294,6 +323,12 @@ A plausible institutional architecture has five layers:
 
 This design may be more robust to electoral turnover than tying public access to a specific vendor or model. The entitlement and safeguards can remain stable while procurement and pedagogy adapt.
 
+## A Korea-specific policy architecture
+
+For Korea, a universal account should be evaluated as the first layer of a five-part package rather than a complete program. The second layer is progressive AI and job-transition education measured by unaided retention, not course completion. The third is career-ladder insurance: paid training, transition income, and incentives to redesign junior roles rather than remove them. The fourth is human-reviewed care and administrative assistance with appeal rights. The fifth creates citizen claims on AI capital through pension exposure, worker ownership, regional compute funds, or other durable assets.
+
+The policy dashboard should report four joint gates: lower Wolfson polarization and capability gaps than the market benchmark; nonnegative cost-adjusted EDE income; no deterioration in vulnerable employment or junior career entry; and auditable data, model choice, human escalation, and supplier switching. No scalar welfare score should override a failure on rights or safety.
+
 # Empirical Identification Agenda
 
 The present model cannot determine whether a public AI program would work in practice. A credible empirical program would proceed in stages.
@@ -312,7 +347,7 @@ All human-subject research requires ethics review before recruitment, informed c
 
 # Limitations
 
-The paper has seven important limitations.
+The paper has nine important limitations.
 
 1. It is a partial-equilibrium transition model. Wages, prices, firm entry, labor demand, and aggregate savings do not clear in equilibrium.
 2. Premium adoption is a reduced-form function of initial resources rather than a price-sensitive choice.
@@ -321,6 +356,8 @@ The paper has seven important limitations.
 5. The simulated population is synthetic and is not calibrated to Korean joint distributions.
 6. The Wolfson and Atkinson results depend on the chosen income definition and finite horizon.
 7. Monte Carlo robustness shows stability within the specified model family, not external validity.
+8. The network topology in the interactive extension is stylized; diffusion and homophily are not yet estimated from Korean social or workplace networks.
+9. NVIDIA's Korean personas are fully synthetic and may align with marginal distributions while misrepresenting important demographic joints. They support stress testing, not population inference.
 
 These limitations imply that the paper should be read as theory-assisted policy design. Its quantitative findings discipline intuition, expose hidden assumptions, and identify empirical thresholds. They do not rank actual programs.
 
@@ -336,6 +373,9 @@ The policy objective should therefore be a public AI option that increases the c
 
 - Core model: `scripts/07_public_ai_policy_simulation.py`
 - Robustness code: `scripts/08_economics_robustness.py`
+- NVIDIA aggregate-profile bridge: `scripts/09_prepare_nvidia_korea_personas.py`
+- Interactive network model: `src/simulation/model.ts`
+- Three-dimensional policy laboratory: `src/components/InequalityWorld.tsx`
 - Unit tests: `tests/test_public_ai_policy.py`
 - Baseline outputs: `results/public_ai_full4/`
 - Robustness outputs: `results/economics_robustness_full/`
