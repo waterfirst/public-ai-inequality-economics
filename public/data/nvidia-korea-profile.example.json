@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "source": "NVIDIA Korea 형식 예시 — 실제 집계 아님",
+  "license": "Example only",
+  "sampleSize": 600,
+  "strata": [
+    { "ageGroup": "19-29", "sex": "여성", "region": "수도권", "education": "대학교", "occupation": "사무·행정", "count": 100 },
+    { "ageGroup": "30-39", "sex": "남성", "region": "수도권", "education": "대학교", "occupation": "ICT·정보서비스", "count": 100 },
+    { "ageGroup": "40-49", "sex": "여성", "region": "영남권", "education": "고등학교", "occupation": "판매·서비스", "count": 100 },
+    { "ageGroup": "50-64", "sex": "남성", "region": "충청권", "education": "고등학교", "occupation": "제조·공정", "count": 140 },
+    { "ageGroup": "65-74", "sex": "여성", "region": "호남권", "education": "중학교", "occupation": "돌봄·서비스", "count": 100 },
+    { "ageGroup": "75-99", "sex": "여성", "region": "강원·제주", "education": "초등학교", "occupation": "농림·현장", "count": 60 }
+  ],
+  "limitations": [
+    "UI 업로드 형식을 보여주기 위한 예시로 실제 NVIDIA 분포가 아니다."
+  ]
+}
