@@ -1,0 +1,11 @@
+{
+  "valid": true,
+  "errors": [],
+  "warnings": [],
+  "summary": {
+    "strataCount": 3405,
+    "retainedCount": 92322,
+    "unknownShare": 0.0,
+    "dominantStratumShare": 0.008871
+  }
+}

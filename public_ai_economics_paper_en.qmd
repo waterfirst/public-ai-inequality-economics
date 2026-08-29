@@ -304,6 +304,35 @@ Three findings stand out because they come from real Korean structure, not from 
 
 These results remain model-conditional comparative statics. The NVIDIA population is synthetic and marginal-aligned, the occupational exposure mapping is a transparent rule rather than an estimate, and no general-equilibrium wage adjustment is modeled. What is new is that the qualitative conclusions survive when the population structure and the key parameters are replaced by official Korean statistics.
 
+# Robustness on the Real Population: Confidence Intervals, Ablations, Finite Size {#sec-rigor}
+
+The real-population results above are upgraded to publication-grade with paired Monte Carlo, mechanism ablations, and finite-size scaling (`scripts/13_rigor_experiments.py`; `results/rigor/rigor_report.json`). The population is the governance-validated broad-occupation profile (3,405 strata; the skill's `validate --strict` passes with no forbidden narrative fields), and the pre-registered hypotheses and permitted claims are fixed in `research-contract.md`.
+
+**Paired Monte Carlo (40 seeds, common random numbers, n = 1,600).** Every policy raises Wolfson polarization with a 95% confidence interval strictly above zero, confirming H1 (universal access does not by itself reverse polarization). The comprehensive package has the lowest rise, and the paired market-minus-comprehensive difference is +0.0275 with a 95% CI of [0.0252, 0.0298], which excludes zero, confirming H2.
+
+| Policy | Δ Wolfson (mean) | 95% CI | Δ vulnerable emp. |
+|---|---:|---|---:|
+| Market / premium AI | 0.1915 | [0.187, 0.196] | −0.2 pp |
+| Universal public AI | 0.1903 | [0.186, 0.194] | −0.2 pp |
+| Public AI + education | 0.1943 | [0.190, 0.198] | +2.5 pp |
+| Public AI + care | 0.1866 | [0.183, 0.191] | +3.2 pp |
+| Comprehensive public option | **0.1639** | **[0.161, 0.167]** | **+5.9 pp** |
+| Low-quality public AI | 0.1924 | [0.188, 0.197] | +1.6 pp |
+
+**Mechanism ablations decompose the package into two distinct channels.** Removing each mechanism from the comprehensive package in turn shows that the polarization effect and the employment effect run through *different* levers:
+
+| Ablation | Δ Wolfson | Δ vulnerable emp. |
+|---|---:|---:|
+| Full comprehensive package | 0.1639 | +5.9 pp |
+| − capital dividend / ownership | **0.1899** | +5.9 pp |
+| − care | 0.1667 | +2.5 pp |
+| − education | 0.1607 | +3.2 pp |
+| − compensatory design | 0.1643 | +5.9 pp |
+
+Removing capital-income recycling and worker/citizen ownership raises polarization the most (0.164 → 0.190), so **broadened AI-capital ownership is the dominant polarization-reducing mechanism** in this population. Removing education or care roughly halves the vulnerable-employment gain (5.9 pp → 3.2 / 2.5 pp) while barely moving polarization, so **education and care are the employment-inclusion mechanisms**. This refines the paper's earlier "education is pivotal" statement into a two-channel result: education and care raise vulnerable-group employment, whereas capital ownership is what actually compresses the distribution.
+
+**Finite-size scaling.** The market-versus-comprehensive ordering is stable and non-vanishing across n ∈ {250, 500, 1,000, 2,000} (market Δ Wolfson 0.207 → 0.191, comprehensive 0.176 → 0.165), so the result is not a small-sample artifact. Remaining skill gates—global Sobol sensitivity, network-topology variation, and hysteresis on policy-withdrawal paths—are documented as the next phase in `research-contract.md`.
+
 # Baseline Results {#sec-baseline}
 
 ## Dynamic distributional effects
