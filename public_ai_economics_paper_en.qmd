@@ -14,7 +14,9 @@ format:
     number-sections: true
 ---
 
-> **Working-paper status and interpretation.** This paper presents a calibrated computational thought experiment, not an empirical estimate of Korea or any other economy. Agents, parameters, and policy costs are synthetic. Quantitative magnitudes should not be interpreted as forecasts or causal effects. The contribution is to identify mechanisms, derive falsifiable comparative statics, and define an empirical research agenda.
+> **Working-paper status and interpretation.** This paper presents a calibrated computational thought experiment, not a forecast of Korea or any other economy. The simulated household population remains synthetic, and quantitative magnitudes should not be read as causal effects. What is *new in this revision* is that the previously assumption-based structural parameters—occupational-reallocation speed, the capital-income share, cross-industry productivity dispersion, and the regional-productivity penalty—are now **anchored to official Korean statistics retrieved directly from the KOSIS (Statistics Korea) and ECOS (Bank of Korea) OpenAPIs**. Every calibrated number is traceable to a statistics-table identifier and query date (see @sec-krcalib and `public/data/kr_real/MANIFEST.json`). The contribution is to identify mechanisms, discipline them with real Korean industrial and economic statistics, derive falsifiable comparative statics, and define an empirical research agenda.
+
+> **국문 요약.** 본 연구는 보편적 공공·소버린 AI 서비스가 급속한 AI 확산이 초래하는 분배적 결과(양극화)를 완화할 수 있는지를 이질적 에이전트(heterogeneous-agent) 전이 모형으로 분석한다. 핵심은 **명목 접근(nominal access)과 실효 이용(effective use)의 구분**이다: 모두에게 무료로 AI를 제공해도 숙련·직무 유연성·프리미엄 모델 접근·자본 소유가 불평등하면 실효 이용과 경제적 성과는 벌어진다. 이번 개정본은 통계청 KOSIS와 한국은행 ECOS의 OpenAPI로 내려받은 **실제 한국 산업·경제 통계**로 모형의 핵심 파라미터를 보정하였다. 산업별 취업자(경제활동인구조사), 산업·지역별 노동생산성, 국민계정 기반 노동소득분배율을 사용해 (i) 직무 재배치 속도, (ii) 자본소득 비중, (iii) 산업 간 생산성 격차, (iv) 지역 생산성 페널티를 추정하였다. 분석 결과, 보편적 접근은 필요한 인프라이지만 그 자체로 양극화를 되돌리지 못하며, 적응형 교육·표적 돌봄·AI 자본의 광범위한 소유가 결합될 때에만 분배 개선이 나타난다. 모든 통계 수치는 통계표 ID와 조회일로 추적 가능하다.
 
 # Abstract
 
@@ -59,13 +61,13 @@ The extension also uses NVIDIA's `Nemotron-Personas-Korea` as a synthetic strati
 
 ## Households
 
-The economy contains (N) heterogeneous households indexed by (i) over discrete periods (t=0,\ldots,T). Each household has state
+The economy contains (N) heterogeneous households indexed by (i) over discrete periods $t=0,\ldots,T$. Each household has state
 
 \[
 s_{it}=(y_{it}^{L},h_{it},k_{it},e_i,f_i,b_{it},v_i,r_i),
 \]
 
-where (y^L) is labor income, (h\in[0,1]) is AI-relevant human capital, (k>0) is AI-complementary capital, (e\in[0,1]) is occupational AI exposure, (f\in[0,1]) is occupational flexibility, (b\in[0,1]) is a care or administrative burden, (v\in\{0,1\}) indicates vulnerability, and (r\in[0,1]) is the initial resource rank. Initial labor income and capital are lognormal and positively associated with the latent resource state. Skills and flexibility are correlated with the same state but retain idiosyncratic variation.
+where (y^L) is labor income, $h\in[0,1]$ is AI-relevant human capital, (k>0) is AI-complementary capital, $e\in[0,1]$ is occupational AI exposure, $f\in[0,1]$ is occupational flexibility, $b\in[0,1]$ is a care or administrative burden, $v\in\{0,1\}$ indicates vulnerability, and $r\in[0,1]$ is the initial resource rank. Initial labor income and capital are lognormal and positively associated with the latent resource state. Skills and flexibility are correlated with the same state but retain idiosyncratic variation.
 
 Households may purchase a premium AI service. The probability of premium adoption is
 
@@ -73,7 +75,7 @@ Households may purchase a premium AI service. The probability of premium adoptio
 \Pr(P_i=1)=\Lambda(-4.2+7r_i),
 \]
 
-where (Lambda) is the logistic function. This reduced-form adoption rule captures affordability and organizational complementarity. It is not a demand system estimated from prices.
+where $\Lambda$ is the logistic function. This reduced-form adoption rule captures affordability and organizational complementarity. It is not a demand system estimated from prices.
 
 ## Effective AI services
 
@@ -87,13 +89,13 @@ q_0, & \text{otherwise},
 \end{cases}
 \]
 
-where (Delta_q) is the premium-quality advantage, (q_G) public quality, and (q_0) the residual low-quality service. Public access succeeds with probability
+where $\Delta_q$ is the premium-quality advantage, (q_G) public quality, and (q_0) the residual low-quality service. Public access succeeds with probability
 
 \[
 \Pr(X_{it}^{G}=1)=x_G\tau_G\tau_i,
 \]
 
-where (x_G) is nominal coverage, (	au_G) institutional trustworthiness, and (	au_i) household trust. Effective AI services are
+where (x_G) is nominal coverage, $\tau_G$ institutional trustworthiness, and $\tau_i$ household trust. Effective AI services are
 
 \[
 a_{it}=q_{it}\Lambda(-0.8+2.5h_{it}+1.2f_i).
@@ -117,7 +119,7 @@ h_{i,t+1}=\operatorname{clip}\left[h_{it}+\eta_G(1.15-r_i)(1-h_{it})
 \tag{1b}
 \]
 
-Here (\lambda) is social diffusion and (\sigma) is peer learning. Homophily can produce capability clusters: the same spillover that accelerates national adoption may amplify between-cluster inequality when disadvantaged agents mainly connect to other low-skill agents. Progressive education can instead seed high-return nodes inside those clusters. The browser laboratory exposes these mechanisms and visualizes the resulting network; the publication model treats them as hypotheses pending Korean network calibration.
+Here $\lambda$ is social diffusion and $\sigma$ is peer learning. Homophily can produce capability clusters: the same spillover that accelerates national adoption may amplify between-cluster inequality when disadvantaged agents mainly connect to other low-skill agents. Progressive education can instead seed high-return nodes inside those clusters. The browser laboratory exposes these mechanisms and visualizes the resulting network; the publication model treats them as hypotheses pending Korean network calibration.
 
 ## Labor augmentation, displacement, and care
 
@@ -126,18 +128,18 @@ The growth rate of labor income is
 \[
 g_{it}=0.043e_i a_{it}(0.28+0.72h_{it})
 +\chi e_iX_{it}^{G}(1-h_{it})(1-r_i)
--\rho e_i(1-\mathcal{A}_{it})
+-\rho e_i$1-\mathcal{A}_{it}$
 +\gamma c_Gv_i(1-b_{it})+\phi g_{i,t-1},
 \tag{2}
 \]
 
-where (chi) is compensatory design, (ho) occupational-reallocation speed, (c_G) care-service intensity, (phi) dynamic feedback, and
+where $\chi$ is compensatory design, $\rho$ occupational-reallocation speed, (c_G) care-service intensity, $\phi$ dynamic feedback, and
 
 \[
 \mathcal{A}_{it}=0.42h_{it}+0.28f_i+0.30\min(a_{it},1)
 \]
 
-is adaptive capacity. Labor income evolves as (y_{i,t+1}^{L}=y_{it}^{L}\exp(g_{it})), with bounded period growth for numerical stability.
+is adaptive capacity. Labor income evolves as $y_{i,t+1}^{L}=y_{it}^{L}\exp(g_{it})$, with bounded period growth for numerical stability.
 
 Public education changes human capital:
 
@@ -164,7 +166,7 @@ y_{it}=y_{it}^{L}+\pi_{it}-T_{it}+D_{it}.
 \tag{5}
 \]
 
-The government taxes a share (	au_K) of AI-capital income and returns the revenue to households with progressive weights (omega_i\propto1.05-r_i):
+The government taxes a share $\tau_K$ of AI-capital income and returns the revenue to households with progressive weights $\omega_i\propto1.05-r_i$:
 
 \[
 \sum_i D_{it}=\sum_i T_{it}=\tau_K\sum_i\pi_{it}.
@@ -178,21 +180,21 @@ C_G=T\left[0.0035x_Gq_G^2+0.012\eta_G+0.010c_G+0.0015\omega_G\right],
 \tag{7}
 \]
 
-where (omega_G) is worker-ownership intensity. Net output and net equally distributed equivalent (EDE) income subtract (mC_G), where (m\in[0.5,4]) is a Monte Carlo marginal resource-cost multiplier. This is resource accounting, not a complete tax-incidence model.
+where $\omega_G$ is worker-ownership intensity. Net output and net equally distributed equivalent (EDE) income subtract (mC_G), where $m\in[0.5,4]$ is a Monte Carlo marginal resource-cost multiplier. This is resource accounting, not a complete tax-incidence model.
 
 # Comparative Statics
 
 ## Proposition 1: Universal access need not equalize outcomes
 
-**Proposition 1.** Suppose premium adoption and skills are increasing in initial resources, (partial P_i/\partial r_i>0) and (partial h_i/\partial r_i>0). If AI is skill-complementary and premium quality exceeds public quality, then setting public nominal coverage to one does not in general eliminate the resource gradient in AI augmentation.
+**Proposition 1.** Suppose premium adoption and skills are increasing in initial resources, $\partial P_i/\partial r_i>0$ and $\partial h_i/\partial r_i>0$. If AI is skill-complementary and premium quality exceeds public quality, then setting public nominal coverage to one does not in general eliminate the resource gradient in AI augmentation.
 
 **Proof sketch.** From equations (1) and (2), labor augmentation is increasing in (q_i), (h_i), and their interaction. Universal public coverage removes the extensive access difference for nonpremium households but leaves premium quality and skill gradients intact. The derivative of augmentation with respect to (r_i) remains positive whenever the direct skill and premium-quality terms exceed the compensatory term (chi(1-h_i)(1-r_i)). Therefore equal access is not sufficient for equal marginal returns. (square)
 
 ## Proposition 2: A compensatory-design threshold exists
 
-**Proposition 2.** Holding displacement and capital-income channels fixed, there exists a threshold (chi^*) above which the labor-augmentation gradient with respect to initial resources becomes nonpositive.
+**Proposition 2.** Holding displacement and capital-income channels fixed, there exists a threshold $\chi^*$ above which the labor-augmentation gradient with respect to initial resources becomes nonpositive.
 
-**Proof sketch.** The resource derivative of equation (2)'s augmentation terms is continuous and decreasing in (chi). At (chi=0), the derivative is positive under complementarity. For sufficiently large (chi), the progressive term dominates because it is decreasing in (h_i) and (r_i). The intermediate value theorem yields a threshold. This proposition concerns labor augmentation, not total income: unequal capital ownership can preserve overall polarization even when the labor gradient reverses. (square)
+**Proof sketch.** The resource derivative of equation (2)'s augmentation terms is continuous and decreasing in $\chi$. At (chi=0), the derivative is positive under complementarity. For sufficiently large $\chi$, the progressive term dominates because it is decreasing in (h_i) and (r_i). The intermediate value theorem yields a threshold. This proposition concerns labor augmentation, not total income: unequal capital ownership can preserve overall polarization even when the labor gradient reverses. (square)
 
 ## Proposition 3: AI-enabled care has targeted labor-supply effects
 
@@ -206,7 +208,7 @@ The proposition follows mechanically from the employment transition. Its empiric
 
 This distinction motivates reporting polarization, gross output, net output, and EDE income separately.
 
-# Calibration and Computational Design
+# Calibration and Computational Design {#sec-calib}
 
 The baseline is a normalized calibration designed for mechanism comparison. It is not matched to Korean moments.
 
@@ -214,10 +216,10 @@ The baseline is a normalized calibration designed for mechanism comparison. It i
 |---|---:|---:|---|
 | Agents | 1,400 | 900 in robustness | Synthetic households per run |
 | Horizon | 15 | 12 in robustness | Model periods |
-| Premium quality gap (Delta_q) | 0.45 | 0.05–1.05 | Frontier advantage |
-| Reallocation speed (ho) | 0.045 | 0.01–0.10 | Task-displacement pressure |
+| Premium quality gap $\Delta_q$ | 0.45 | 0.05–1.05 | Frontier advantage |
+| Reallocation speed $\rho$ | 0.045 | 0.01–0.10 | Task-displacement pressure |
 | AI-capital return (r_K) | 0.065 | 0.02–0.11 | Return to AI-complementary capital |
-| Dynamic feedback (phi) | 0.18 | -0.05–0.35 | Persistence of prior gains |
+| Dynamic feedback $\phi$ | 0.18 | -0.05–0.35 | Persistence of prior gains |
 | Public-cost multiplier (m) | 1 | 0.5–4.0 | Procurement and fiscal efficiency |
 | Baseline seeds | 40 | 3 per parameter draw | Idiosyncratic population variation |
 
@@ -241,6 +243,27 @@ The Korea extension separates calibration targets into three tiers. Tier 1 uses 
 The NVIDIA preparation pipeline discards names and all narrative persona fields. It exports counts over age group, sex, region, education, and occupation. The simulator samples agents from those counts, then assigns economic states through transparent equations. This preserves provenance while preventing narrative personas from being mistaken for observed income, preferences, trust, or policy behavior. Every NVIDIA-based result must be accompanied by (i) the sampled record count, (ii) the dataset version and CC BY 4.0 attribution, (iii) comparison against Korean joint distributions, and (iv) a warning that the source is fully synthetic.
 
 The interactive extension adds three Korea-relevant parameters: a junior-career displacement shock for codified entry tasks, a noncapital-region penalty on effective rather than nominal access, and network learning. These parameters are exploratory until estimated. They allow falsifiable experiments about why high national AI use can coexist with widening returns to AI.
+
+# Empirical Calibration with Korean Official Statistics {#sec-krcalib}
+
+The original working paper set its structural parameters by assumption for mechanism comparison. This revision replaces four of them with values estimated directly from official Korean statistics, retrieved programmatically from the KOSIS (Statistics Korea) and ECOS (Bank of Korea) OpenAPIs. The download and calibration are fully scripted (`scripts/10_download_kr_data.py`, `scripts/11_calibrate_from_kr_data.py`), and every series is logged with its statistics-table identifier and query date in `public/data/kr_real/MANIFEST.json`. This section reports the anchors; it does not claim to estimate causal effects.
+
+| Parameter | Meaning in the model | Real Korean anchor | Value | Source table |
+|---|---|---|---:|---|
+| $\kappa_K$ | AI-capital income channel weight | 1 − labor income share (5-yr mean) | **0.327** | ECOS 200Y116 |
+| $\rho$ | occupational-reallocation speed | mean annual cross-industry employment reallocation | **0.0136** | KOSIS DT_1DA9003S |
+| $\zeta$ | industry productivity heterogeneity | s.d. of industry labor-productivity growth | **0.115** | KOSIS DT_344N_1D8A_AA |
+| $\psi$ | non-capital-region penalty | top–bottom regional manufacturing productivity gap | **0.569** | KOSIS DT_344N_1D8B_DD |
+
+Three findings are worth stating because they discipline the model rather than merely decorate it.
+
+**The labor income share rose, so the capital channel is real but not dominant.** Using compensation of employees over factor-cost national income (ECOS 200Y116), the Korean labor income share moved from 62.3 percent in 2015 to 67.4 percent in 2024, implying a capital income share near one-third. The model therefore treats the AI-capital channel as a material but secondary force, consistent with the paper's finding that capital returns affect wealth concentration more than the Wolfson index.
+
+**Observed cross-industry reallocation is smaller than the synthetic baseline.** The mean annual sum of absolute industry-employment share changes across 21 industries (KOSIS DT_1DA9003S, seasonally adjusted, 2013–2025) is only 0.0136, well below the 0.045 baseline used in the thought experiment. This tempers alarmist reallocation narratives: at the national aggregate, Korean employment has re-sorted across industries slowly. It also sharpens the paper's warning—if AI accelerates this historically slow reallocation, the displacement channel that the model shows to be the largest driver of polarization would move into an unfamiliar regime.
+
+**Regional productivity dispersion is large.** Manufacturing labor productivity across 18 regions (KOSIS DT_344N_1D8B_DD, 2024) ranges from an index of 128 in the lowest region to 297 in the highest, a 57 percent top-to-bottom gap. This supports modeling a non-capital-region penalty on *effective* rather than nominal AI access: a universal login does not equalize the organizational and capital context in which AI is actually used.
+
+These anchors are substituted into the calibration table of @sec-calib as empirically grounded central values; the Monte Carlo ranges are retained around them so that the robustness exercise still spans plausible uncertainty. The synthetic-population caveat is unchanged: real parameters discipline the mechanisms, but the household cross-section is still simulated and must not be read as a Korean sample.
 
 # Baseline Results
 

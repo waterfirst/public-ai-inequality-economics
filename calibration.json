@@ -1,0 +1,51 @@
+{
+  "source_manifest": "public/data/kr_real/MANIFEST.json",
+  "params": {
+    "kappa_capital": {
+      "value": 0.3266,
+      "labor_share_recent5_mean": 0.6734,
+      "labor_share_2015": 0.6232,
+      "labor_share_2024": 0.6736,
+      "source": "ECOS 200Y116 (피용자보수 / 요소비용국민소득)",
+      "maps_to": "AI-capital income channel weight (paper r_K / capital share)"
+    },
+    "rho_realloc": {
+      "value": 0.0136,
+      "annual_series": [
+        0.0135,
+        0.0146,
+        0.0119,
+        0.0101,
+        0.0147,
+        0.015,
+        0.0169,
+        0.0174,
+        0.0114,
+        0.0123,
+        0.0106,
+        0.0145
+      ],
+      "years": "2013-2025",
+      "n_industries": 21,
+      "source": "KOSIS DT_1DA9003S (산업별 계절조정 취업자)",
+      "definition": "mean annual sum of |industry employment share change| / 2",
+      "maps_to": "paper rho (occupational-reallocation speed)"
+    },
+    "prod_dispersion": {
+      "value": 0.1145,
+      "mean_growth": 0.006,
+      "n_obs": 4861,
+      "source": "KOSIS DT_344N_1D8A_AA (노동생산성지수, 산업생산기준)",
+      "maps_to": "heterogeneity of productivity gains across industries"
+    },
+    "region_penalty": {
+      "value": 0.5688,
+      "period": "2024",
+      "n_regions": 18,
+      "top": 297.21,
+      "bottom": 128.15,
+      "source": "KOSIS DT_344N_1D8B_DD (제조업 지역별 노동생산성)",
+      "maps_to": "paper non-capital-region effective-access penalty"
+    }
+  }
+}
