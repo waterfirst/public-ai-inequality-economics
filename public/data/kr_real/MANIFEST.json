@@ -1,0 +1,45 @@
+{
+  "generated": "2026-08-29",
+  "datasets": [
+    {
+      "file": "kosis_industry_employment_DT_1DA9003S.csv",
+      "rows": 3276,
+      "source": "KOSIS 경제활동인구조사",
+      "table_id": "DT_1DA9003S",
+      "query_date": "2026-08-29",
+      "note": "산업별 계절조정 취업자(천명)"
+    },
+    {
+      "file": "kosis_productivity_DT_344N_1D8A_AA.csv",
+      "rows": 4944,
+      "source": "KOSIS 노동생산성지수",
+      "table_id": "DT_344N_1D8A_AA",
+      "query_date": "2026-08-29",
+      "note": "노동생산성지수(산업생산기준) (prdSe=Q)"
+    },
+    {
+      "file": "kosis_productivity_DT_344N_1D8B_DD.csv",
+      "rows": 6121,
+      "source": "KOSIS 노동생산성지수",
+      "table_id": "DT_344N_1D8B_DD",
+      "query_date": "2026-08-29",
+      "note": "제조업 지역별 노동생산성 (prdSe=Q)"
+    },
+    {
+      "file": "ecos_national_income_200Y116.csv",
+      "rows": 576,
+      "source": "ECOS 국민계정",
+      "table_id": "200Y116",
+      "query_date": "2026-08-29",
+      "note": "부문별 국민처분가능소득(피용자보수/영업잉여 -> 노동소득분배율)"
+    },
+    {
+      "file": "ecos_income_distribution_901Y112.csv",
+      "rows": 504,
+      "source": "ECOS 소득분배지표",
+      "table_id": "901Y112",
+      "query_date": "2026-08-29",
+      "note": "지니계수 등 (분배지표 검증용)"
+    }
+  ]
+}

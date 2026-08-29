@@ -4,6 +4,28 @@
 
 This repository contains an English economics working paper, a transparent heterogeneous-agent transition model, Monte Carlo robustness analysis, tests, and reproducible figures.
 
+## ISTANS 2026 revision — empirical calibration with Korean official statistics
+
+This revision adapts the paper for the **2026 산업통상부 ISTANS 논문경진대회** while preserving the original intent. Four previously assumption-based structural parameters are now anchored to **real Korean statistics pulled directly from the KOSIS (Statistics Korea) and ECOS (Bank of Korea) OpenAPIs** — no synthetic stand-ins for these values:
+
+| Parameter | Real anchor | Value | Source table |
+|---|---|---:|---|
+| Capital income share | 1 − labor income share (5-yr mean) | 0.327 | ECOS 200Y116 |
+| Occupational-reallocation speed | mean annual cross-industry employment reallocation (2013–2025) | 0.0136 | KOSIS DT_1DA9003S |
+| Industry productivity dispersion | s.d. of industry labor-productivity growth | 0.115 | KOSIS DT_344N_1D8A_AA |
+| Regional productivity penalty | top–bottom manufacturing productivity gap (18 regions, 2024) | 0.569 | KOSIS DT_344N_1D8B_DD |
+
+Key empirical finding: Korea's labor income share **rose from 62.3% (2015) to 67.4% (2024)**, and observed cross-industry employment reallocation (~1.4%/yr) is well below the model's original synthetic baseline (4.5%) — which sharpens, rather than weakens, the paper's warning about AI-accelerated displacement.
+
+Reproduce the data layer (requires `KOSIS_API_KEY` and `ECOS_API_KEY` in the environment):
+
+```bash
+python3 scripts/10_download_kr_data.py      # -> public/data/kr_real/*.csv + MANIFEST.json
+python3 scripts/11_calibrate_from_kr_data.py # -> calibration.json
+```
+
+Every downloaded series is logged with its statistics-table id and query date in `public/data/kr_real/MANIFEST.json`. See the paper's *Empirical Calibration with Korean Official Statistics* section for interpretation.
+
 ## Working paper
 
 - [PDF](Public_AI_Social_Infrastructure_Economics_Working_Paper_2026-08-09.pdf)
