@@ -1,0 +1,108 @@
+{
+  "empirical_population": "NVIDIA Nemotron-Personas-Korea",
+  "population_strata": 30463,
+  "population_sample_size_source": 100000,
+  "calibration": {
+    "rho_realloc": 0.0136,
+    "kappa_capital": 0.3266,
+    "r_K_base": 0.065,
+    "realized_initial_capital_share": 0.3266,
+    "region_capacity": {
+      "수도권": 0.918,
+      "영남권": 0.932,
+      "호남권": 1.0,
+      "충청권": 0.935,
+      "강원·제주": 0.696
+    },
+    "region_period": 2024
+  },
+  "baseline_runs": 144,
+  "policy_means": {
+    "시장·고가AI": {
+      "delta_gini": 0.159162,
+      "delta_wolfson": 0.184561,
+      "delta_atkinson": 0.155637,
+      "delta_ede": -0.260411,
+      "fiscal_cost": 0.0,
+      "delta_net_output": -0.098324,
+      "delta_net_ede": -0.260411,
+      "delta_middle": -0.138333,
+      "delta_skill_gap": 0.008055,
+      "delta_capital": 0.019303,
+      "delta_output": -0.098324,
+      "delta_vulnerable_employment": -0.001781
+    },
+    "전국민 공공AI": {
+      "delta_gini": 0.151332,
+      "delta_wolfson": 0.179859,
+      "delta_atkinson": 0.149985,
+      "delta_ede": -0.221187,
+      "fiscal_cost": 0.026672,
+      "delta_net_output": -0.080452,
+      "delta_net_ede": -0.247859,
+      "delta_middle": -0.146198,
+      "delta_skill_gap": -0.013379,
+      "delta_capital": 0.017651,
+      "delta_output": -0.05378,
+      "delta_vulnerable_employment": -0.001665
+    },
+    "공공AI+공교육": {
+      "delta_gini": 0.148836,
+      "delta_wolfson": 0.180177,
+      "delta_atkinson": 0.149343,
+      "delta_ede": -0.17304,
+      "fiscal_cost": 0.046295,
+      "delta_net_output": -0.036004,
+      "delta_net_ede": -0.219335,
+      "delta_middle": -0.148594,
+      "delta_skill_gap": -0.508743,
+      "delta_capital": 0.01684,
+      "delta_output": 0.010291,
+      "delta_vulnerable_employment": 0.027007
+    },
+    "공공AI+돌봄": {
+      "delta_gini": 0.147809,
+      "delta_wolfson": 0.176511,
+      "delta_atkinson": 0.146034,
+      "delta_ede": -0.204586,
+      "fiscal_cost": 0.042552,
+      "delta_net_output": -0.080139,
+      "delta_net_ede": -0.247139,
+      "delta_middle": -0.14612,
+      "delta_skill_gap": -0.017882,
+      "delta_capital": 0.017327,
+      "delta_output": -0.037587,
+      "delta_vulnerable_employment": 0.032108
+    },
+    "공공AI 종합안": {
+      "delta_gini": 0.123511,
+      "delta_wolfson": 0.151073,
+      "delta_atkinson": 0.117556,
+      "delta_ede": -0.119231,
+      "fiscal_cost": 0.066425,
+      "delta_net_output": -0.036721,
+      "delta_net_ede": -0.185655,
+      "delta_middle": -0.137552,
+      "delta_skill_gap": -0.51154,
+      "delta_capital": 0.005989,
+      "delta_output": 0.029704,
+      "delta_vulnerable_employment": 0.061162
+    },
+    "공공AI 실패": {
+      "delta_gini": 0.157519,
+      "delta_wolfson": 0.183852,
+      "delta_atkinson": 0.154348,
+      "delta_ede": -0.243083,
+      "fiscal_cost": 0.015325,
+      "delta_net_output": -0.092018,
+      "delta_net_ede": -0.258408,
+      "delta_middle": -0.138958,
+      "delta_skill_gap": -0.187896,
+      "delta_capital": 0.018985,
+      "delta_output": -0.076693,
+      "delta_vulnerable_employment": 0.016218
+    }
+  },
+  "max_budget_error": 1.1368683772161603e-13,
+  "limit": "실측 3종(KOSIS·ECOS·NVIDIA)으로 보정한 메커니즘 실험; 현실 예측·인과효과 아님"
+}

@@ -22,7 +22,7 @@ format:
 
 This paper studies whether a universal public or sovereign artificial-intelligence service can limit the distributional consequences of rapid AI adoption. I develop a finite-horizon heterogeneous-agent transition model in which households differ in initial labor income, skills, AI-capital ownership, occupational exposure, adaptability, care burdens, trust, and ability to purchase premium AI. Effective AI use depends jointly on physical access, model quality, trust, skills, and occupational flexibility. AI can augment labor, displace tasks, increase returns to capital, reduce care-related barriers to employment, and generate cumulative advantages through dynamic feedback.
 
-The model compares a market benchmark with five public-AI regimes: universal access, access plus public education, access plus AI-enabled care, a comprehensive public option, and a low-quality implementation. In the baseline calibration, universal access reduces the increase in the Wolfson polarization index by 11.4 percent relative to the market benchmark, while education and the comprehensive package reduce it by 23.5 and 29.0 percent. Yet polarization continues to rise under every realistic baseline regime because premium-model quality, skill complementarity, occupational reallocation, and unequal capital ownership continue to favor initially advantaged agents. A 3,600-run Monte Carlo exercise introduces uncertainty in premium quality, reallocation speed, AI-capital returns, dynamic feedback, and the marginal resource cost of public provision. Public AI plus education lowers polarization in every sampled environment and raises net equally distributed equivalent income in 59.0 percent; the comprehensive package lowers polarization in every environment but raises net output in only 43.5 percent because it is more costly. The results imply that universal access is a necessary infrastructure layer, not a sufficient distributional policy. Effective equalization requires compensatory design, adaptive education, targeted care, and broader ownership of AI capital.
+The model compares a market benchmark with five public-AI regimes: universal access, access plus public education, access plus AI-enabled care, a comprehensive public option, and a low-quality implementation. In the baseline calibration, universal access reduces the increase in the Wolfson polarization index by 11.4 percent relative to the market benchmark, while education and the comprehensive package reduce it by 23.5 and 29.0 percent. Yet polarization continues to rise under every realistic baseline regime because premium-model quality, skill complementarity, occupational reallocation, and unequal capital ownership continue to favor initially advantaged agents. A 3,600-run Monte Carlo exercise introduces uncertainty in premium quality, reallocation speed, AI-capital returns, dynamic feedback, and the marginal resource cost of public provision. Public AI plus education lowers polarization in every sampled environment and raises net equally distributed equivalent income in 59.0 percent; the comprehensive package lowers polarization in every environment but raises net output in only 43.5 percent because it is more costly. The results imply that universal access is a necessary infrastructure layer, not a sufficient distributional policy. Effective equalization requires compensatory design, adaptive education, targeted care, and broader ownership of AI capital. As a robustness check on real Korean structure, the same dynamics are re-run on a population whose demographic composition is drawn from the NVIDIA *Nemotron-Personas-Korea* dataset (30,463 age × sex × region × education × occupation strata) with parameters anchored to KOSIS and ECOS; the policy ranking is preserved and, on this realistic population, only the comprehensive package materially reduces polarization while raising vulnerable-group employment (@sec-realsim).
 
 **Keywords:** artificial intelligence; public option; sovereign AI; inequality; polarization; occupational reallocation; education; digital public infrastructure  
 **JEL codes:** D31, H41, I24, J24, O33
@@ -265,7 +265,46 @@ Three findings are worth stating because they discipline the model rather than m
 
 These anchors are substituted into the calibration table of @sec-calib as empirically grounded central values; the Monte Carlo ranges are retained around them so that the robustness exercise still spans plausible uncertainty. The synthetic-population caveat is unchanged: real parameters discipline the mechanisms, but the household cross-section is still simulated and must not be read as a Korean sample.
 
-# Baseline Results
+# Simulation on a Real Korean Population: NVIDIA × KOSIS × ECOS {#sec-realsim}
+
+The baseline experiment (@sec-baseline) draws agents from a latent Gaussian. This section re-runs the same transition dynamics on a population whose demographic *structure* is taken from a real Korean dataset and whose transition parameters are anchored to the KOSIS/ECOS values of @sec-krcalib. Three independent real sources are combined:
+
+1. **Population — NVIDIA Nemotron-Personas-Korea.** 100,000 streamed records are aggregated into 30,463 anonymized strata over age group × sex × region × education × occupation (`scripts/09`). Only counts are retained; names and free-text personas are discarded. This dataset is fully synthetic and marginal-aligned, so it is used for demographic *structure only*, never as a survey.
+2. **Dynamics parameters — KOSIS.** Occupational-reallocation speed is set to the observed $\rho = 0.0136$; a non-capital-region effective-access penalty is read directly from regional manufacturing labor productivity (DT_344N_1D8B_DD), giving a region-capacity ratio of 0.92 (수도권), 0.93 (영남), 1.00 (호남), 0.94 (충청), and 0.70 (강원·제주).
+3. **Capital channel — ECOS.** Each agent's capital stock is scaled so the initial AI-capital income share equals the real Korean value $\kappa = 0.327$ (realized share in the simulated population: 0.327).
+
+Economic states are then assigned by transparent rules: education level maps to baseline skill (무학 0.10 → 대학원 0.85), occupation maps to AI exposure and complementarity (professional/clerical work high-exposure, manual/service low-complementarity, 무직 non-employed and vulnerable), and region maps to the effective-access capacity above. The dynamics, metrics, and redistribution accounting are identical to @sec-baseline (the exact-balance budget error is $<10^{-13}$). Full code: `scripts/12_public_ai_real_simulation.py`; outputs in `results/public_ai_real/`.
+
+## Results on the real population
+
+Across 24 seeds and six policies (144 paired runs, 15 periods), the ranking of policies is preserved, but the levels shift in an economically meaningful way.
+
+| Policy | Δ Wolfson | Δ Gini | Δ middle share | Δ net EDE | Δ vulnerable emp. |
+|---|---:|---:|---:|---:|---:|
+| Market / premium AI | 0.185 | 0.159 | −0.138 | −0.260 | −0.2 pp |
+| Universal public AI | 0.180 | 0.151 | −0.146 | −0.248 | −0.2 pp |
+| Public AI + education | 0.180 | 0.149 | −0.149 | −0.219 | +2.7 pp |
+| Public AI + care | 0.177 | 0.148 | −0.146 | −0.247 | +3.2 pp |
+| Comprehensive public option | **0.151** | **0.124** | −0.138 | **−0.186** | **+6.1 pp** |
+| Low-quality public AI | 0.184 | 0.158 | −0.139 | −0.258 | +1.6 pp |
+
+![](results/public_ai_real/01_policy_dynamics.png){fig-alt="Dynamics of Wolfson polarization, middle-income share, skill gap, and top-decile AI-capital share on the NVIDIA Korean population" width=100%}
+
+![](results/public_ai_real/02_quintile_growth.png){fig-alt="Log-income change by initial-resource quintile on the real Korean population" width=95%}
+
+![](results/public_ai_real/03_policy_frontier.png){fig-alt="Efficiency-polarization frontier on the real Korean population" width=90%}
+
+Three findings stand out because they come from real Korean structure, not from a chosen calibration.
+
+**Slow historical reallocation does not neutralize polarization.** Even with the empirically small $\rho = 0.0136$, polarization rises under every regime. In the model the driver is not the *speed* of reallocation but the education–occupation–capital gradient carried by the real population: because Korean skill, premium-AI affordability, and capital ownership are jointly concentrated, a universal login leaves the main gradient intact. This is the paper's central thesis, now reproduced on a real demographic cross-section rather than a stylized one.
+
+**On the real population the comprehensive package is the only clear improver.** It cuts the rise in Wolfson polarization by about 18 percent relative to the market benchmark (0.151 vs 0.185), roughly halves the deterioration in inequality-adjusted (EDE) welfare, and is the only regime that raises vulnerable-group employment by more than five percentage points. Education is the pivotal active ingredient: adding it is what turns the vulnerable-employment effect positive.
+
+**A real Korean population is harder to equalize than a synthetic one.** Net EDE income is negative under every regime in this population, because the NVIDIA cross-section carries a large non-employed and low-education mass (37 percent recorded as 무직 in the strata) that the market allocation leaves behind. This strengthens, rather than softens, the paper's policy conclusion: on realistic Korean demographics, universal access alone is clearly insufficient, and only a compensatory package with adaptive education and broadened AI-capital ownership moves the distribution.
+
+These results remain model-conditional comparative statics. The NVIDIA population is synthetic and marginal-aligned, the occupational exposure mapping is a transparent rule rather than an estimate, and no general-equilibrium wage adjustment is modeled. What is new is that the qualitative conclusions survive when the population structure and the key parameters are replaced by official Korean statistics.
+
+# Baseline Results {#sec-baseline}
 
 ## Dynamic distributional effects
 

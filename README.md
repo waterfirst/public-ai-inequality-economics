@@ -26,6 +26,18 @@ python3 scripts/11_calibrate_from_kr_data.py # -> calibration.json
 
 Every downloaded series is logged with its statistics-table id and query date in `public/data/kr_real/MANIFEST.json`. See the paper's *Empirical Calibration with Korean Official Statistics* section for interpretation.
 
+### Real-population simulation (NVIDIA × KOSIS × ECOS)
+
+The same transition model is re-run on a population whose demographic structure comes from **NVIDIA Nemotron-Personas-Korea** (100k records → 30,463 age × sex × region × education × occupation strata; names and personas discarded), with dynamics parameters anchored to the KOSIS/ECOS values above:
+
+```bash
+. .venv_nv/bin/activate                          # datasets + matplotlib
+python scripts/09_prepare_nvidia_korea_personas.py --rows 100000   # -> public/data/nvidia-korea-profile.json
+python scripts/12_public_ai_real_simulation.py    # -> results/public_ai_real/{figures,csv,report.json}
+```
+
+On this realistic population the policy ranking is preserved and **only the comprehensive public package materially reduces polarization (ΔWolfson 0.151 vs 0.185 market) while raising vulnerable-group employment (+6.1pp)**. Net inequality-adjusted (EDE) welfare is negative under every regime, because the real Korean cross-section carries a large non-employed / low-education mass — which strengthens the paper's conclusion that universal access alone is insufficient. See the paper's *Simulation on a Real Korean Population* section.
+
 ## Working paper
 
 - [PDF](Public_AI_Social_Infrastructure_Economics_Working_Paper_2026-08-09.pdf)
