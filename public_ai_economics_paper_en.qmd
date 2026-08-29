@@ -121,7 +121,7 @@ h_{i,t+1}=\operatorname{clip}\left[h_{it}+\eta_G(1.15-r_i)(1-h_{it})
 \tag{1b}
 \]
 
-Here $\lambda$ is social diffusion and $\sigma$ is peer learning. Homophily can produce capability clusters: the same spillover that accelerates national adoption may amplify between-cluster inequality when disadvantaged agents mainly connect to other low-skill agents. Progressive education can instead seed high-return nodes inside those clusters. The browser laboratory exposes these mechanisms and visualizes the resulting network; the publication model treats them as hypotheses pending Korean network calibration.
+Here $\lambda$ is social diffusion and $\sigma$ is peer learning. Homophily can produce capability clusters: the same spillover that accelerates national adoption may amplify between-cluster inequality when disadvantaged agents mainly connect to other low-skill agents. Progressive education can instead seed high-return nodes inside those clusters. The browser laboratory ([live simulator](https://waterfirst.github.io/public-ai-inequality-economics/)) exposes these mechanisms and visualizes the resulting network; the publication model treats them as hypotheses pending Korean network calibration.
 
 ## Labor augmentation, displacement, and care
 
@@ -464,13 +464,21 @@ The policy objective should therefore be a public AI option that increases the c
 
 # Reproducibility Appendix
 
+- **Interactive simulator (live):** <https://waterfirst.github.io/public-ai-inequality-economics/> — a browser-based Korea Policy Lab (React + Three.js) that runs the policy comparison, lets the reader vary parameters and seeds, load the NVIDIA aggregate profile, and export CSV/JSON. Provenance and limitations are shown next to the upload control; heavy Monte Carlo results are precomputed in the repository.
+- **Source repository:** <https://github.com/waterfirst/public-ai-inequality-economics>
+- Research contract and permitted claims: `research-contract.md`
 - Core model: `scripts/07_public_ai_policy_simulation.py`
 - Robustness code: `scripts/08_economics_robustness.py`
 - NVIDIA aggregate-profile bridge: `scripts/09_prepare_nvidia_korea_personas.py`
+- Korean official-statistics download (KOSIS/ECOS OpenAPI): `scripts/10_download_kr_data.py`
+- Parameter calibration from real data: `scripts/11_calibrate_from_kr_data.py`
+- Real-population simulation (NVIDIA × KOSIS × ECOS): `scripts/12_public_ai_real_simulation.py`
+- Publication-grade robustness (paired MC, ablations, finite size): `scripts/13_rigor_experiments.py`
 - Interactive network model: `src/simulation/model.ts`
 - Three-dimensional policy laboratory: `src/components/InequalityWorld.tsx`
 - Unit tests: `tests/test_public_ai_policy.py`
 - Baseline outputs: `results/public_ai_full4/`
+- Real-population and robustness outputs: `results/public_ai_real/`, `results/rigor/`
 - Robustness outputs: `results/economics_robustness_full/`
 - Publication-scope model tests: 4 (the broader development workspace passed 17 tests before repository extraction)
 - Baseline and threshold runs: 1,128

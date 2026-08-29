@@ -2514,7 +2514,7 @@ q_0, &amp; \text{otherwise},
 <p>Households are embedded in a weighted social-learning network (G=(V,E)), following the generative logic of agent-based social science and the econophysics tradition of deriving distributional regularities from interacting heterogeneous units <span class="citation" data-cites="epstein1999 bouchaud2000">(<a href="#ref-epstein1999" role="doc-biblioref">Epstein 1999</a>; <a href="#ref-bouchaud2000" role="doc-biblioref">Bouchaud and Mézard 2000</a>)</span>. Let (w_{ij}) denote normalized ties based on region, occupation, and resource similarity. Adoption and human capital receive peer terms,</p>
 <p>[ p_{i,t+1}=, ]</p>
 <p>[ h_{i,t+1}=. ]</p>
-<p>Here <span class="math inline">\(\lambda\)</span> is social diffusion and <span class="math inline">\(\sigma\)</span> is peer learning. Homophily can produce capability clusters: the same spillover that accelerates national adoption may amplify between-cluster inequality when disadvantaged agents mainly connect to other low-skill agents. Progressive education can instead seed high-return nodes inside those clusters. The browser laboratory exposes these mechanisms and visualizes the resulting network; the publication model treats them as hypotheses pending Korean network calibration.</p>
+<p>Here <span class="math inline">\(\lambda\)</span> is social diffusion and <span class="math inline">\(\sigma\)</span> is peer learning. Homophily can produce capability clusters: the same spillover that accelerates national adoption may amplify between-cluster inequality when disadvantaged agents mainly connect to other low-skill agents. Progressive education can instead seed high-return nodes inside those clusters. The browser laboratory (<a href="https://waterfirst.github.io/public-ai-inequality-economics/">live simulator</a>) exposes these mechanisms and visualizes the resulting network; the publication model treats them as hypotheses pending Korean network calibration.</p>
 </section>
 </section>
 <section id="labor-augmentation-displacement-and-care" class="level2" data-number="4.3">
@@ -3129,13 +3129,21 @@ q_0, &amp; \text{otherwise},
 <section id="reproducibility-appendix" class="level1" data-number="17">
 <h1 data-number="17"><span class="header-section-number">17</span> Reproducibility Appendix</h1>
 <ul>
+<li><strong>Interactive simulator (live):</strong> <a href="https://waterfirst.github.io/public-ai-inequality-economics/" class="uri">https://waterfirst.github.io/public-ai-inequality-economics/</a> — a browser-based Korea Policy Lab (React + Three.js) that runs the policy comparison, lets the reader vary parameters and seeds, load the NVIDIA aggregate profile, and export CSV/JSON. Provenance and limitations are shown next to the upload control; heavy Monte Carlo results are precomputed in the repository.</li>
+<li><strong>Source repository:</strong> <a href="https://github.com/waterfirst/public-ai-inequality-economics" class="uri">https://github.com/waterfirst/public-ai-inequality-economics</a></li>
+<li>Research contract and permitted claims: <code>research-contract.md</code></li>
 <li>Core model: <code>scripts/07_public_ai_policy_simulation.py</code></li>
 <li>Robustness code: <code>scripts/08_economics_robustness.py</code></li>
 <li>NVIDIA aggregate-profile bridge: <code>scripts/09_prepare_nvidia_korea_personas.py</code></li>
+<li>Korean official-statistics download (KOSIS/ECOS OpenAPI): <code>scripts/10_download_kr_data.py</code></li>
+<li>Parameter calibration from real data: <code>scripts/11_calibrate_from_kr_data.py</code></li>
+<li>Real-population simulation (NVIDIA × KOSIS × ECOS): <code>scripts/12_public_ai_real_simulation.py</code></li>
+<li>Publication-grade robustness (paired MC, ablations, finite size): <code>scripts/13_rigor_experiments.py</code></li>
 <li>Interactive network model: <code>src/simulation/model.ts</code></li>
 <li>Three-dimensional policy laboratory: <code>src/components/InequalityWorld.tsx</code></li>
 <li>Unit tests: <code>tests/test_public_ai_policy.py</code></li>
 <li>Baseline outputs: <code>results/public_ai_full4/</code></li>
+<li>Real-population and robustness outputs: <code>results/public_ai_real/</code>, <code>results/rigor/</code></li>
 <li>Robustness outputs: <code>results/economics_robustness_full/</code></li>
 <li>Publication-scope model tests: 4 (the broader development workspace passed 17 tests before repository extraction)</li>
 <li>Baseline and threshold runs: 1,128</li>
