@@ -12,10 +12,10 @@ import type { Environment, Metrics, PersonaProfile, PolicyKey } from "./simulati
 
 const CONTROLS: Array<{ key: keyof Environment; label: string; hint: string; min: number; max: number; step: number }> = [
   { key: "premiumGap", label: "프리미엄 품질격차", hint: "무료·공공 모델과 고가 모델의 성능차", min: 0, max: 1.05, step: 0.01 },
-  { key: "reallocationSpeed", label: "직무 대체압력", hint: "AI 노출 직무의 소득·고용 충격", min: 0, max: 0.1, step: 0.002 },
+  { key: "reallocationSpeed", label: "직무 대체압력", hint: "AI 노출 직무의 소득·고용 충격 · 기본값 0.0136 = KOSIS 산업별 취업자 실측 재배치율", min: 0, max: 0.1, step: 0.002 },
   { key: "juniorDisplacement", label: "청년 경력사다리 충격", hint: "초급 정형업무 자동화의 추가 충격", min: 0, max: 0.1, step: 0.002 },
   { key: "networkSpillover", label: "사회학습 확산", hint: "동료 네트워크를 통한 활용역량 전파", min: 0, max: 0.12, step: 0.002 },
-  { key: "capitalReturn", label: "AI 자본수익률", hint: "데이터·컴퓨트·조직자본의 보상", min: 0.01, max: 0.12, step: 0.002 },
+  { key: "capitalReturn", label: "AI 자본수익률", hint: "데이터·컴퓨트·조직자본의 보상 · 자본소득 비중 κ=0.327(ECOS 노동소득분배율)에 정합", min: 0.01, max: 0.12, step: 0.002 },
   { key: "ruralPenalty", label: "비수도권 실효접근 페널티", hint: "인프라가 아닌 교육·조직지원의 지역차", min: 0, max: 0.35, step: 0.01 },
 ];
 
@@ -167,7 +167,7 @@ function App() {
         <div className="conclusion-band"><BookOpen size={25} /><div><span>논문의 정책 결론</span><h3>“무상 AI”가 아니라 <em>역량·시간·교섭력·자본청구권</em>을 늘리는 공공 AI여야 한다.</h3></div><a href="https://github.com/waterfirst/public-ai-inequality-economics">연구 저장소 <ChevronRight size={16} /></a></div>
       </section>
 
-      <footer><p>Public AI as Social Infrastructure · Nak Cho Choi · 2026</p><p>모든 수치는 모형 조건부 비교정학이며 예측·인과효과가 아닙니다.</p></footer>
+      <footer><p>Public AI as Social Infrastructure · Nak Cho Choi · 2026</p><p>기본 파라미터는 KOSIS·ECOS 실측으로 보정(재배치율 0.0136, 자본소득비중 0.327, 지역 생산성격차 반영). 양극화 완화의 주력은 AI 자본소유 환류, 취약계층 고용 개선의 주력은 교육·돌봄입니다.</p><p>모든 수치는 모형 조건부 비교정학이며 예측·인과효과가 아닙니다.</p></footer>
     </main>
   );
 }

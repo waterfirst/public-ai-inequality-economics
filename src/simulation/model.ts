@@ -10,14 +10,22 @@ import type {
   SimulationRun,
 } from "./types";
 
+// Defaults calibrated to official Korean statistics (see paper §"Empirical
+// Calibration with Korean Official Statistics" and calibration.json):
+//  - reallocationSpeed 0.0136  <- KOSIS DT_1DA9003S (mean annual cross-industry
+//    employment reallocation, 2013-2025); replaces the earlier synthetic 0.045.
+//  - ruralPenalty 0.15         <- informed by KOSIS DT_344N_1D8B_DD regional
+//    manufacturing-productivity dispersion (top-bottom gap ~0.57).
+//  - capitalReturn 0.065 kept; the real capital income share (kappa=0.327,
+//    ECOS 200Y116) is matched by capital scaling in the Python engine.
 export const DEFAULT_ENVIRONMENT: Environment = {
   premiumGap: 0.45,
-  reallocationSpeed: 0.045,
+  reallocationSpeed: 0.0136,
   capitalReturn: 0.065,
   feedback: 0.18,
   networkSpillover: 0.035,
   juniorDisplacement: 0.035,
-  ruralPenalty: 0.12,
+  ruralPenalty: 0.15,
 };
 
 export const POLICIES: Record<PolicyKey, Policy> = {
