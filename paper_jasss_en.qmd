@@ -1,0 +1,131 @@
+---
+title: "Public AI as Social Infrastructure: A Heterogeneous-Agent Model of Access, Occupational Reallocation, and Economic Polarization Calibrated to Korean Official Statistics"
+author:
+  - name: "Nak Cho Choi"
+    affiliation: "Independent researcher"
+date: "2026-08-29"
+lang: en
+format:
+  html:
+    theme: cosmo
+    embed-resources: true
+    toc: true
+    number-sections: true
+    fig-align: center
+---
+
+*Prepared in the manuscript conventions of the Journal of Artificial Societies and Social Simulation (JASSS): an ODD model description, an explicit experimental design, and data / ethics / reproducibility statements. The Korean-language version is the domestic competition submission; this is the international-journal version.*
+
+## Abstract {.unnumbered}
+
+**Context.** Governments are beginning to provide universal public AI. In July 2026 Korea's Ministry of Science and ICT launched *AI for All* (*모두의 AI*), a free, usage-unlimited domestic AI chatbot plus a public-service agent, motivated by a usage gap in which roughly one-third of citizens still do not use AI. **Objective.** We ask whether universal public access limits the AI-driven polarization it is meant to address. **Methods.** We build a transparent heterogeneous-agent transition model that separates *nominal access* from *effective use*, describe it with the ODD protocol, and run it on a population whose demographic structure is drawn from NVIDIA *Nemotron-Personas-Korea* (100,000 records aggregated to 3,405 privacy-preserving strata). Four structural parameters are calibrated to official Korean statistics retrieved directly from the KOSIS (Statistics Korea) and ECOS (Bank of Korea) OpenAPIs. We use paired Monte Carlo with 95% confidence intervals, mechanism ablations, and finite-size scaling. **Results.** Every policy raises Wolfson polarization (all CIs above zero); only a comprehensive package significantly reduces it relative to a market benchmark (market−comprehensive difference +0.0275, 95% CI [0.0252, 0.0298]). Ablations reveal two distinct levers: broadened AI-capital ownership is the dominant polarization-reducing mechanism, whereas education and care drive vulnerable-group employment. **Conclusion.** Universal access is a necessary infrastructure layer but not a sufficient distributional policy; the outcome of *AI for All* depends on compensatory design, not on the launch of the chatbot.
+
+**Keywords:** public AI; sovereign AI; agent-based model; ODD; inequality; polarization; occupational reallocation; Korea
+
+# Introduction
+
+Generative AI diffuses at the interface almost instantly while frontier capability stays scarce, metered, and complementary with private data, organisational capital, and human expertise. This creates a two-layer distributional problem: a familiar *access* gap (devices, connectivity, software) and a more consequential *effective-use* gap (model quality, inference budgets, proprietary data, workflow integration, and the human capital that converts a model output into economic value). Korea's *AI for All* programme (2026) makes the question concrete: it delivers universal free access precisely because about one-third of citizens do not use AI, yet equal access to a generic interface need not imply equal effective capability. This paper asks whether such universal access reverses AI-driven polarization, and if not, which policy design does.
+
+We contribute (i) a transparent heterogeneous-agent model separating nominal access from effective use; (ii) calibration of four previously-assumed parameters to official Korean industrial and economic statistics; (iii) a simulation on a real Korean demographic structure from a governance-validated synthetic-persona profile; and (iv) publication-grade robustness (paired Monte Carlo confidence intervals, mechanism ablations, finite-size scaling) with a pre-registered research contract.
+
+# Related Work
+
+The model builds on the task approach to technological change [Autor 2015; Acemoglu & Restrepo 2021], in which automation displaces labour from tasks while complementarity and new tasks reinstate demand. AI is distinctive because high-income cognitive occupations can be both highly exposed and highly complementary, so displacement may compress wage inequality while capital returns widen wealth inequality [Rockall et al., IMF 2025; Korinek & Stiglitz 2019]. Field evidence that generative AI raises productivity more for lower-baseline workers [Brynjolfsson et al. 2023] motivates a compensatory-design parameter. For Korea, the Bank of Korea (2025) estimates 51% of workers in high-exposure occupations and documents strong demographic gradients in adoption. Methodologically the paper follows the generative agent-based tradition [Epstein 1999] and econophysics of interacting heterogeneous units [Bouchaud 2000], and adopts transparent ABM validation as emphasised in JASSS.
+
+# The Model (ODD Protocol)
+
+## Overview
+
+**Purpose.** To compare, as model-conditional comparative statics, how universal public AI and five alternative policy designs affect economic polarization and vulnerable-group employment in a Korean population.
+
+**Entities and state variables.** Agents are households with state $s_{it}=(y^L_{it},h_{it},k_{it},e_i,f_i,b_{it},v_i,r_i)$: labour income $y^L$, AI human capital $h\in[0,1]$, AI-complementary capital $k>0$, occupational exposure $e$, flexibility $f$, care burden $b$, vulnerability $v\in\{0,1\}$, and initial resource rank $r$. Global entities are the policy regime and the government redistribution account.
+
+**Process overview and scheduling.** Each period: (1) effective AI service is computed; (2) skill updates through progressive education and use; (3) labour income grows via complementarity minus displacement plus care relief and feedback; (4) employment updates; (5) AI-capital income accrues, is taxed and redistributed under a budget identity; (6) distributional metrics are recorded. Paired policy runs share initial population and random streams (common random numbers).
+
+## Design concepts
+
+*Emergence:* polarization and capital concentration emerge from heterogeneous effective use. *Adaptation:* skill accumulation and adoption respond to access, education, and peers. *Sensing:* agents act on their own state; no strategic anticipation. *Interaction:* peer diffusion on a homophilous network (interactive extension). *Stochasticity:* lognormal endowments, premium adoption, access success. *Observation:* Gini, Atkinson($\varepsilon{=}1$), Wolfson polarization, middle-income share, EDE income, vulnerable employment, top-decile AI-capital share.
+
+## Details
+
+**Initialization.** The agent cross-section is sampled from a governance-validated aggregation of NVIDIA *Nemotron-Personas-Korea* (age × sex × region × education × broad occupation; 3,405 strata; names and narrative fields removed; `validate --strict` passes). Education maps to baseline skill, occupation to AI exposure and complementarity, region to an effective-access capacity taken from regional manufacturing productivity.
+
+**Input data.** Structural parameters are calibrated to Korean official statistics (see @sec-calib). No other empirical inputs are used; the synthetic population is not a survey.
+
+**Submodels.** Effective AI service is
+$$ a_{it}=q_{it}\,\Lambda\!\left(-0.8+2.5\,h_{it}+1.2\,f_i\right), $$
+where $q_{it}$ is premium/public/residual quality and $\Lambda$ is logistic. AI-capital income is $\pi_{it}=r_K\,k_{it}\,e_i\min(a_{it},1.5)$; taxes on $\pi$ are redistributed with progressive weights (budget error $<10^{-10}$). Skill accumulation is progressive in $(1-r_i)$. Full equations and constants (each tagged `estimated`, `calibrated`, `literature`, `scenario`, or `normalization`) are in `research-contract.md` and `scripts/07,12,13`.
+
+# Calibration with Korean Official Statistics {#sec-calib}
+
+Four parameters are set from series retrieved programmatically from the KOSIS and ECOS OpenAPIs; each is logged with a table id and query date in `public/data/kr_real/MANIFEST.json`.
+
+| Parameter | Meaning | Real anchor | Value | Source |
+|---|---|---|---:|---|
+| $\kappa_K$ | capital income share | 1 − labour income share (5-yr mean) | 0.327 | ECOS 200Y116 |
+| $\rho$ | reallocation speed | mean annual cross-industry employment reallocation | 0.0136 | KOSIS DT_1DA9003S |
+| $\zeta$ | industry productivity dispersion | s.d. of industry productivity growth | 0.115 | KOSIS DT_344N_1D8A_AA |
+| $\psi$ | regional penalty | top–bottom manufacturing productivity gap | 0.569 | KOSIS DT_344N_1D8B_DD |
+
+The Korean labour income share rose from 62.3% (2015) to 67.4% (2024); observed cross-industry reallocation (1.4%/yr) is well below the earlier synthetic baseline (4.5%); manufacturing productivity varies ~57% across 18 regions.
+
+# Experimental Design
+
+Six policies are compared: market/premium AI; universal public AI; +education; +care; a comprehensive package (access, education, care, capital dividend, worker ownership); and a low-quality failure case. Experiments: (1) paired Monte Carlo, 40 seeds, common random numbers, $n=1{,}600$, 95% CIs; (2) mechanism ablations removing each lever from the comprehensive package; (3) finite-size scaling at $n\in\{250,500,1000,2000\}$. Pre-registered hypotheses: **H1** universal access does not reverse polarization; **H2** the comprehensive package reduces it with a CI excluding zero; **H3** education/care drive employment inclusion.
+
+# Results
+
+## Paired Monte Carlo
+
+Every policy raises Wolfson polarization with a 95% CI strictly above zero (H1). The comprehensive package is lowest, and the paired market−comprehensive difference is +0.0275, 95% CI [0.0252, 0.0298], excluding zero (H2).
+
+| Policy | Δ Wolfson | 95% CI | Δ vulnerable emp. |
+|---|---:|---|---:|
+| Market / premium AI | 0.1915 | [0.187, 0.196] | −0.2 pp |
+| Universal public AI | 0.1903 | [0.186, 0.194] | −0.2 pp |
+| Public AI + education | 0.1943 | [0.190, 0.198] | +2.5 pp |
+| Public AI + care | 0.1866 | [0.183, 0.191] | +3.2 pp |
+| Comprehensive public option | **0.1639** | **[0.161, 0.167]** | **+5.9 pp** |
+| Low-quality public AI | 0.1924 | [0.188, 0.197] | +1.6 pp |
+
+![Efficiency–polarization frontier on the real Korean population; marker size is vulnerable-employment gain.](results/public_ai_real/03_policy_frontier.png){width=76%}
+
+## Mechanism ablations
+
+| Ablation (from comprehensive) | Δ Wolfson | Δ vulnerable emp. |
+|---|---:|---:|
+| Full package | 0.1639 | +5.9 pp |
+| − AI-capital dividend / ownership | **0.1899** | +5.9 pp |
+| − care | 0.1667 | +2.5 pp |
+| − education | 0.1607 | +3.2 pp |
+| − compensatory design | 0.1643 | +5.9 pp |
+
+Removing capital-income recycling and ownership raises polarization most (0.164 → 0.190): **broadened AI-capital ownership is the dominant polarization-reducing lever**. Removing education or care halves the vulnerable-employment gain while barely moving polarization: **education and care are the employment-inclusion levers** (H3).
+
+## Finite-size scaling
+
+The market-versus-comprehensive ordering is stable and non-vanishing across $n\in\{250,500,1000,2000\}$ (market 0.207 → 0.191; comprehensive 0.176 → 0.165), so results are not a small-sample artefact.
+
+# Discussion
+
+The findings speak directly to *AI for All*. The non-using third that motivates the programme coincides with the low-education, non-employed mass for which access alone yields negative inequality-adjusted welfare in the model. Whether the programme narrows or widens gaps depends on compensatory design: progressive AI-capability education measured by unaided retention; care and administrative relief; and citizen/worker claims on AI capital (pension exposure, worker ownership, regional compute funds). Dashboards should track distribution, transition, and rights jointly rather than usage counts.
+
+# Conclusion
+
+Universal public AI removes the first-order access gap but, on a realistic Korean population and under real-data calibration, does not by itself reverse polarization. A comprehensive package is the only design that significantly compresses the distribution and raises vulnerable employment, and the two effects run through different mechanisms—capital ownership for polarization, education and care for employment. The policy objective should be to raise the capabilities, time, bargaining power, and capital claims of initially disadvantaged users, not merely to ship a cheaper chatbot.
+
+# Data availability statement {.unnumbered}
+
+Korean official statistics are retrieved from the KOSIS and ECOS OpenAPIs; the exact series, table ids, and query dates are in `public/data/kr_real/MANIFEST.json`. The demographic profile is derived from NVIDIA *Nemotron-Personas-Korea* (CC BY 4.0); only anonymized age × sex × region × education × occupation counts are stored. All code, data, and figures are at <https://github.com/waterfirst/public-ai-inequality-economics>. A live interactive simulator is at <https://waterfirst.github.io/public-ai-inequality-economics/>.
+
+# Ethics statement {.unnumbered}
+
+No human subjects were involved. The persona dataset is fully synthetic; names and narrative fields are excluded from all analytical outputs, and the data are not treated as a survey, causal evidence, or a nationally representative joint distribution. Results are model-conditional comparative statics, not forecasts or causal policy effects.
+
+# Reproducibility statement {.unnumbered}
+
+Deterministic seeds and a versioned configuration are used throughout. Pipeline: `scripts/10` (download) → `scripts/11` (calibration) → `scripts/12` (real-population simulation) → `scripts/13` (paired MC, ablations, finite size); model unit tests pass. Pre-registered hypotheses and permitted/prohibited claims are in `research-contract.md`.
+
+# References {.unnumbered}
+
+Acemoglu, D. & Restrepo, P. (2021). Bouchaud, J.-P. (2000). Brynjolfsson, E. et al. (2023). Autor, D. (2015). Epstein, J. (1999). Korinek, A. & Stiglitz, J. (2019). Rockall, E. et al. (IMF, 2025). Bank of Korea (2025). OECD (2026). *Full bibliographic details in `references.bib`; to be rendered in the JASSS Harvard style on submission.*
