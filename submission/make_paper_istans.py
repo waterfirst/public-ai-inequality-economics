@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-"""2026 ISTANS 논문경진대회 공식 양식에 맞춘 국문 논문 PDF 생성."""
+"""2026 ISTANS 논문경진대회 공식 양식 국문 논문 PDF (본문 10매+, 요약 2매).
+
+작성요령 반영: 휴먼명조(대체: NanumMyeongjo), 본문 12pt/각주 10pt,
+줄간격 160%(표 130%), 양쪽맞춤, 여백 위20·아래20·좌30·우30mm,
+구성 표지→제목→논문요약→목차→본문→참고문헌→부록.
+"""
 import base64, os
 from playwright.sync_api import sync_playwright
 
@@ -10,6 +15,7 @@ def b64(name):
     return "data:image/png;base64," + base64.b64encode(open(p, "rb").read()).decode() if os.path.exists(p) else ""
 FIG_FRONTIER = b64("03_policy_frontier.png")
 FIG_DYN = b64("01_policy_dynamics.png")
+FIG_QUINT = b64("02_quintile_growth.png")
 
 TITLE = "산업통계로 본 공공 AI 정책의 경제 양극화 효과"
 SUBTITLE = "한국 공식통계와 합성 인구를 이용한 이질적 에이전트 시뮬레이션 — ‘모두의 AI’ 사업에의 함의"
@@ -18,38 +24,42 @@ AFFIL = "삼성디스플레이"
 
 CSS = """
 <style>
-@page { size:A4; margin:20mm 20mm 18mm 20mm;
-  @top-center { content:"2026 ISTANS 논문경진대회"; font-family:'NanumGothic'; font-size:9pt; color:#555; }
-  @bottom-center { content: counter(page); font-family:'NanumGothic'; font-size:9pt; color:#555; } }
+@page { size:A4; margin:20mm 30mm 20mm 30mm;
+  @top-center { content:"2026 ISTANS 논문경진대회"; font-family:'NanumGothic'; font-size:9pt; color:#666; }
+  @bottom-center { content: counter(page); font-family:'NanumMyeongjo'; font-size:10pt; color:#444; } }
 *{box-sizing:border-box;}
-body{font-family:'NanumMyeongjo',serif; color:#111; font-size:11pt; line-height:1.7; margin:0;}
-.cover{height:257mm; display:flex; flex-direction:column; justify-content:center; text-align:center; page-break-after:always;}
+body{font-family:'NanumMyeongjo',serif; color:#111; font-size:12pt; line-height:1.6; margin:0; text-align:justify;}
+.cover{height:245mm; display:flex; flex-direction:column; justify-content:center; text-align:center; page-break-after:always;}
 .cover .badge{font-family:'NanumGothic'; font-size:13pt; color:#333; letter-spacing:2px; margin-bottom:40mm;}
-.cover h1{font-family:'NanumGothic'; font-size:20pt; font-weight:800; line-height:1.4; margin:0 8mm;}
-.cover h2{font-family:'NanumMyeongjo'; font-size:13pt; font-weight:400; color:#333; margin:6mm 10mm 40mm;}
+.cover h1{font-family:'NanumGothic'; font-size:20pt; font-weight:800; line-height:1.4; margin:0 6mm;}
+.cover h2{font-size:12.5pt; font-weight:400; color:#333; margin:6mm 8mm 40mm; line-height:1.5;}
 .cover .date{font-size:12pt; margin-bottom:14mm;}
 .cover table{margin:0 auto; border-collapse:collapse;}
 .cover td{border:none; padding:2mm 6mm; font-size:12pt;}
 .cover td.k{font-family:'NanumGothic'; font-weight:700; text-align:right; color:#333;}
 .pagebreak{page-break-after:always;}
-h3.ch{font-family:'NanumGothic'; font-size:15pt; font-weight:800; margin:6mm 0 3mm; color:#12345a; border-bottom:2px solid #12345a; padding-bottom:1.5mm;}
-h4.sec{font-family:'NanumGothic'; font-size:12.5pt; font-weight:800; margin:4mm 0 1.5mm;}
-h5.sub{font-family:'NanumGothic'; font-size:11.5pt; font-weight:700; margin:3mm 0 1mm; color:#333;}
-p{margin:1.6mm 0; text-align:justify;}
-ul{margin:1mm 0 2mm 6mm;} li{margin:0.6mm 0;}
+.titleblock{text-align:center; margin:2mm 0 6mm;}
+.titleblock h1{font-family:'NanumGothic'; font-size:16pt; font-weight:800; line-height:1.4; margin:0 0 2mm;}
+.titleblock h2{font-size:11.5pt; font-weight:400; color:#333; margin:0;}
+.summary-h{font-family:'NanumGothic'; font-size:14pt; font-weight:800; text-align:center; margin:5mm 0 4mm;}
+h3.ch{font-family:'NanumGothic'; font-size:15pt; font-weight:800; margin:7mm 0 3mm; color:#12345a; border-bottom:2px solid #12345a; padding-bottom:1.5mm;}
+h4.sec{font-family:'NanumGothic'; font-size:13pt; font-weight:800; margin:4.5mm 0 1.5mm;}
+h5.sub{font-family:'NanumGothic'; font-size:12pt; font-weight:700; margin:3mm 0 1mm; color:#333;}
+p{margin:1.8mm 0;}
+ul{margin:1mm 0 2mm 6mm;} li{margin:0.8mm 0;}
 b.k{font-family:'NanumGothic';}
-.summary{font-family:'NanumGothic'; font-size:13pt; font-weight:800; text-align:center; margin:4mm 0 4mm;}
-.toc h4{font-family:'NanumGothic'; font-size:12pt; margin:4mm 0 1mm;}
-.toc div{margin:0.8mm 0;} .toc .i1{margin-left:4mm;} .toc .i2{margin-left:10mm;}
-table.data{width:100%; border-collapse:collapse; margin:2mm 0; font-size:10pt;}
+.toc h4{font-family:'NanumGothic'; font-size:12.5pt; margin:4mm 0 1mm;}
+.toc div{margin:1mm 0;} .toc .i1{margin-left:5mm;} .toc .i2{margin-left:11mm;}
+table.data{width:100%; border-collapse:collapse; margin:2mm 0; font-size:10.5pt; line-height:1.3;}
 table.data td, table.data th{border:1px solid #555; padding:1.4mm 2mm; text-align:center;}
 table.data th{background:#eef2f7; font-family:'NanumGothic';}
 table.data td.l{text-align:left;}
-.capT{font-family:'NanumGothic'; font-size:10pt; font-weight:700; margin:3mm 0 0.5mm;}
-.capF{font-family:'NanumGothic'; font-size:10pt; font-weight:700; text-align:center; margin:3mm 0 0.5mm;}
-img.fig{width:80%; display:block; margin:1mm auto; border:1px solid #ccc;}
-.src{font-size:9pt; color:#555; margin:0.5mm 0 2mm;}
-.refs{font-size:10pt;} .refs p{margin:1mm 0; text-indent:-6mm; margin-left:6mm;}
+.capT{font-family:'NanumGothic'; font-size:10.5pt; font-weight:700; margin:3mm 0 0.5mm;}
+.capF{font-family:'NanumGothic'; font-size:10.5pt; font-weight:700; text-align:center; margin:3mm 0 0.5mm;}
+img.fig{width:82%; display:block; margin:1mm auto; border:1px solid #ccc;}
+.src{font-size:10pt; color:#555; margin:0.5mm 0 2mm; line-height:1.3;}
+.fn{font-size:10pt; color:#333; line-height:1.3; border-top:1px solid #bbb; margin-top:3mm; padding-top:1.5mm;}
+.refs{font-size:11pt; line-height:1.4;} .refs p{margin:1.2mm 0; text-indent:-7mm; margin-left:7mm;}
 </style>
 """
 
@@ -60,83 +70,122 @@ COVER = f"""
   <h2>{SUBTITLE}</h2>
   <div class='date'>2026.  8.</div>
   <table><tr><td class='k'>소　속</td><td>{AFFIL}</td></tr>
-  <tr><td class='k'>이　름</td><td>{AUTHOR}</td></tr></table>
+  <tr><td class='k'>성　명</td><td>{AUTHOR}</td></tr></table>
+</div>
+"""
+
+TITLEBLOCK = f"""
+<div class='titleblock'>
+  <h1>{TITLE}</h1>
+  <h2>{SUBTITLE}</h2>
 </div>
 """
 
 SUMMARY = """
-<div class='summary'>논문 요약</div>
-<p>본 연구의 목적은 <b class='k'>보편적 공공 AI 제공이 인공지능 확산에 따른 경제 양극화를 완화할 수 있는지</b>를 산업통계에 근거해 정량적으로 규명하는 데 있다. 2026년 7월 정부가 착수한 ‘모두의 AI’ 사업은 전 국민에게 무료·무제한 국산 AI 챗봇을 제공하려 하지만, 같은 서비스를 받아도 숙련·직무·자본이 다르면 실효 이용과 성과가 벌어진다. 이에 본 연구는 산업별 취업자·산업 및 지역별 노동생산성·국민계정 노동소득분배율 등 <b class='k'>공식 산업·경제 통계로 모형의 구조 파라미터를 직접 보정</b>하고, 합성 인구(연령×성별×지역×교육×직업 층화)를 표본으로 삼아 이질적 에이전트 시뮬레이션을 수행하였다. 짝지은 몬테카를로(95% 신뢰구간)·메커니즘 제거·표본크기 스케일링으로 강건성을 검증한 결과, <b class='k'>보편적 접근은 필요조건이나 그 자체로 양극화를 되돌리지 못하며</b>, 교육·돌봄·AI 자본소유가 결합될 때에만 분배가 개선되었다. 특히 <b class='k'>양극화 완화의 주력은 ‘AI 자본소유 환류’, 취약계층 고용 개선의 주력은 ‘교육·돌봄’</b>이라는 두 채널 구조를 규명하였다. 본 결과는 ‘모두의 AI’를 이용률이 아닌 분배·전환·권리 지표로 설계·평가해야 함을 시사한다.</p>
-<p class='src'>주제어: 산업통계, 공공 AI, 경제 양극화, 이질적 에이전트 시뮬레이션, 노동생산성, 노동소득분배율</p>
+<div class='summary-h'>논문 요약</div>
+<p>인공지능(AI)의 급속한 확산은 산업별로 상이한 노출도와 보완성을 통해 고용과 소득에 비대칭적 영향을 준다. 2025년 기준 국내 생성형 AI 이용자는 2,300만 명을 넘어섰지만, 국민의 약 3분의 1은 여전히 AI를 사용하지 못하고 있으며, 이용자 상당수도 외산 무료 서비스에 의존한다. 이러한 배경에서 정부는 2026년 7월 전 국민에게 무료·무제한 국산 AI 챗봇과 공공서비스 AI 에이전트를 제공하는 ‘모두의 AI’ 프로젝트에 착수하였다. 그러나 같은 서비스를 제공받더라도 숙련, 직무 유연성, 프리미엄 모델에 대한 접근, 그리고 데이터·컴퓨트·플랫폼 등 AI 자본의 소유가 다르면 실제로 얻는 생산성(실효 이용)과 경제적 성과는 벌어진다. 따라서 ‘무료 보급’이 곧 격차 해소를 의미하는지는 자명하지 않다.</p>
+<p>본 연구의 목적은 <b class='k'>보편적 공공 AI 제공이 AI가 유발하는 경제 양극화를 완화할 수 있는지</b>를 산업통계에 근거해 정량적으로 규명하는 데 있다. 이를 위해 본 연구는 명목 접근(nominal access)과 실효 이용(effective use)을 구분하는 이질적 에이전트(heterogeneous-agent) 전이 모형을 구성하고, 모형의 핵심 구조 파라미터를 임의로 가정하지 않고 <b class='k'>공식 산업·경제 통계로 직접 보정</b>하였다. 구체적으로 통계청 KOSIS의 산업별 취업자(경제활동인구조사)와 산업·지역별 노동생산성지수, 한국은행 ECOS의 국민계정 노동소득분배율을 OpenAPI로 수집하여, 산업 간 직무 재배치 속도, 자본소득 비중, 산업 및 지역 생산성 격차를 추정하였다. 인구의 인구학적 구조는 공개 합성 페르소나 자료를 연령×성별×지역×교육×직업으로 익명 집계하여 표본으로 사용하되, 개인 식별정보와 서사(narrative) 필드를 모두 제거하고 실제 국민 표본으로 해석하지 않았다.</p>
+<p>모형 위에서 시장 기준안과 다섯 개 공공 AI 정책조합(보편접근, 공교육 결합, 돌봄 결합, 종합안, 저품질 실패안)을 동일 난수·동일 초기인구로 짝지어(paired) 비교하였다. 결과의 신뢰성을 확보하기 위해 40회 몬테카를로 반복의 95% 신뢰구간, 각 정책 요소를 하나씩 제거하는 메커니즘 분해(ablation) 실험, 그리고 표본크기 250~2,000의 스케일링 검증을 수행하였다. 분석 결과는 다음과 같다. 첫째, 산업통계로 보정한 한국의 산업 간 재배치 속도는 연 1.4%로 흔한 ‘대규모 직무 격변’ 서사보다 낮았고, 노동소득분배율은 2015년 62.3%에서 2024년 67.4%로 상승하여 자본소득 비중은 약 3분의 1이었으며, 제조업 지역 간 노동생산성 격차는 상·하위 약 57%에 달하였다.</p>
+<p>둘째, 이 실측 구조를 반영한 정책 시뮬레이션에서 <b class='k'>재배치 속도가 낮음에도 모든 정책에서 양극화(Wolfson 지수)가 상승</b>하였다. 동인은 재배치의 ‘속도’가 아니라 산업·교육·자본에 내재한 격차 구조였다. 셋째, <b class='k'>여섯 정책 중 종합안만이 양극화를 통계적으로 유의하게 완화</b>하였다(시장 대비 감소분 +0.0275, 95% 신뢰구간 [0.0252, 0.0298]로 0을 배제). 넷째, 메커니즘 분해는 <b class='k'>양극화 완화의 주력이 ‘AI 자본소유 환류’이고, 취약계층 고용 개선의 주력이 ‘교육·돌봄’</b>이라는 두 채널 구조를 드러냈다. 즉 무료 접근만으로는 부족하며, 자본소유와 역량투자가 결합될 때에만 분배가 개선된다.</p>
+<p>본 연구는 산업통계를 정책 시뮬레이션의 파라미터로 직접 활용함으로써 정책 평가의 임의성을 줄이고 재현성을 높이는 방법을 제시하며, ‘모두의 AI’ 사업을 이용률이 아니라 분배·전환·권리 지표로 설계·평가해야 한다는 정책적 함의를 도출한다. 산업통계 이용 측면에서는 OpenAPI 확대, 다차원 결합표 일괄 제공, 메타데이터·인용 식별자 표준화 등 ISTANS의 활용도 제고 방안을 제언한다.</p>
+<p class='src'>주제어: 산업통계, 공공 AI, 경제 양극화, 이질적 에이전트 시뮬레이션, 노동생산성, 노동소득분배율, 모두의 AI</p>
 """
 
 TOC = """
 <div class='toc'>
-<h4>차　례</h4>
-<div>제1장 연구의 목적 및 방법</div>
-<div class='i1'>1. 서론: ‘모두의 AI’와 AI 활용 격차</div>
-<div class='i1'>2. 연구 방법과 분석틀</div>
+<h4>목　차</h4>
+<div>제1장 서론 및 연구 방법</div>
+<div class='i1'>1. 연구의 배경과 목적</div>
+<div class='i1'>2. 선행연구 검토</div>
+<div class='i1'>3. 연구 방법과 분석 절차</div>
 <div>제2장 산업통계 기반 파라미터 보정과 모형</div>
 <div class='i1'>1. 활용한 산업통계와 파라미터 보정</div>
-<div class='i1'>2. 이질적 에이전트 모형과 정책 시나리오</div>
+<div class='i2'>(1) 자료의 수집과 재현 절차</div>
+<div class='i2'>(2) 파라미터 보정 결과와 세 가지 실증 사실</div>
+<div class='i1'>2. 이질적 에이전트 모형</div>
+<div class='i2'>(1) 상태변수와 실효 AI 서비스</div>
+<div class='i2'>(2) 노동·자본·재분배 동학과 정책 시나리오</div>
 <div>제3장 시뮬레이션 분석 결과와 정책 함의</div>
 <div class='i1'>1. 실인구 시뮬레이션 결과</div>
 <div class='i2'>(1) 정책별 분배·고용 효과</div>
 <div class='i2'>(2) 강건성: 신뢰구간·메커니즘 분해·표본크기</div>
-<div class='i1'>2. 정책 논의와 결론</div>
+<div class='i1'>2. 정책 논의</div>
 <div class='i2'>(1) ‘모두의 AI’ 설계 제언</div>
-<div class='i2'>(2) 한계와 결론</div>
+<div class='i2'>(2) 산업통계 활용성 제고 방안</div>
+<div class='i1'>3. 한계와 결론</div>
 <div>참고문헌</div>
-<h4 style='margin-top:6mm'>표 차례</h4>
+<div>부록: 재현성 명세 및 명제</div>
+<h4 style='margin-top:5mm'>표 차례</h4>
 <div>&lt;표 2-1&gt; 산업통계 기반 파라미터 보정 결과</div>
 <div>&lt;표 3-1&gt; 정책 시나리오별 분배·고용 효과(실인구, 95% 신뢰구간)</div>
 <div>&lt;표 3-2&gt; 종합안 메커니즘 제거(ablation) 분해</div>
-<h4 style='margin-top:6mm'>그림 차례</h4>
+<div>&lt;표 3-3&gt; 표본크기별 Δ Wolfson(유한크기 스케일링)</div>
+<h4 style='margin-top:4mm'>그림 차례</h4>
 <div>&lt;그림 3-1&gt; 효율–양극화 정책 프런티어</div>
 <div>&lt;그림 3-2&gt; 정책조합별 분배 동학</div>
+<div>&lt;그림 3-3&gt; 초기 자원 5분위별 소득 변화</div>
 </div>
 """
 
 CH1 = """
-<h3 class='ch'>제1장 연구의 목적 및 방법</h3>
-<h4 class='sec'>1. 서론: ‘모두의 AI’와 AI 활용 격차</h4>
-<p>ISTANS(산업통계분석시스템)는 산업통상자원부와 산업연구원이 운영하는 산업통계 빅데이터로, 산업별 생산성·부가가치·고용 등 산업의 구조와 동향을 종합적으로 분석할 수 있게 한다. 본 연구는 이러한 산업통계를 활용하여, 현재 진행 중인 국가 AI 정책의 분배 효과를 정량적으로 평가한다.</p>
-<p>생성형 AI는 기초 인터페이스가 거의 즉시 확산되는 반면, 첨단 역량은 희소하고 과금되며 데이터·조직자본·인적자본과 보완적이다. 이로 인해 (i) 기기·연결성에 대한 <b class='k'>접근 격차</b>와, (ii) 모델 품질·업무 통합·모델 출력을 가치로 바꾸는 역량에 대한 <b class='k'>실효 활용 격차</b>가 동시에 발생한다. 2026년 7월 과학기술정보통신부는 전 국민에게 무료·무제한 국산 AI 챗봇과 공공서비스 AI 에이전트를 제공하는 <b class='k'>‘모두의 AI’ 프로젝트</b>에 착수하였는데, 그 근거는 국민 약 3분의 1이 여전히 AI를 쓰지 못하는 활용 격차였다.</p>
-<p>본 연구의 목적은 <b class='k'>“보편적 공공 AI 제공만으로 AI가 유발하는 경제 양극화를 완화할 수 있는가”</b>라는 질문에 답하는 것이다. 핵심 문제의식은 명목 접근과 실효 이용의 구분에 있다. 무료 계정을 모두에게 열어도, 숙련·직무 유연성·프리미엄 모델 접근·자본 소유가 불평등하면 실효 이용과 경제적 성과는 벌어진다.</p>
+<h3 class='ch'>제1장 서론 및 연구 방법</h3>
 
-<h4 class='sec'>2. 연구 방법과 분석틀</h4>
-<p>본 연구는 세 단계로 구성된다. 첫째, 산업통계로 모형의 <b class='k'>구조 파라미터를 직접 보정</b>한다(제2장 1절). 둘째, 합성 인구를 표본으로 <b class='k'>이질적 에이전트 시뮬레이션</b>을 수행하여 시장 기준과 다섯 개 공공 AI 정책조합을 비교한다(제2장 2절). 셋째, <b class='k'>짝지은 몬테카를로(공통 난수·95% 신뢰구간)·메커니즘 제거(ablation)·표본크기 스케일링</b>으로 결과의 강건성을 검증한다(제3장).</p>
-<p>모든 데이터는 통계표 식별자·출처·조회일을 기록하여 재현 가능하며, 분석 코드·데이터·결과는 공개 저장소로 배포한다. 본 연구의 수치는 모형 조건부 비교정학(comparative statics)이며 예측이나 인과효과 추정이 아님을 밝힌다.</p>
+<h4 class='sec'>1. 연구의 배경과 목적</h4>
+<p>ISTANS(산업통계분석시스템)는 산업통상자원부와 산업연구원이 공동으로 운영하는 산업통계 빅데이터로서, 산업별 생산·부가가치·고용·생산성 등 산업의 구조와 동향을 종합적으로 검색·분석할 수 있게 한다. 본 논문경진대회는 ISTANS의 활용도를 높이고 한국 산업경제의 발전과 산업통계의 활용도·인식 제고를 목적으로 한다. 본 연구는 이러한 취지에 부응하여, 산업통계를 정책 시뮬레이션의 핵심 입력으로 활용해 현재 진행 중인 국가 AI 정책의 분배 효과를 정량적으로 평가한다.</p>
+<p>생성형 AI는 여느 범용기술과 달리 기초 인터페이스가 거의 즉시 확산되는 반면, 첨단 역량은 희소하고 과금되며 민간 데이터·조직자본·인적자본과 강하게 보완적이다. 이 때문에 분배 문제는 두 층위로 나타난다. 첫째는 기기·연결성·소프트웨어에 대한 <b class='k'>접근 격차</b>이고, 둘째는 모델 품질·추론 예산·독점 데이터·업무 통합, 그리고 모델 출력을 실제 경제적 가치로 전환하는 인적자본에 대한 <b class='k'>실효 활용 격차</b>이다. 접근 격차는 눈에 잘 띄지만, 정책적으로 더 중요한 것은 관측이 어려운 두 번째 격차이다. 가장 강력한 모델이 점차 유료화되는 가운데, 일반 인터페이스에 대한 균등한 접근이 곧 균등한 실효 역량을 의미하지는 않기 때문이다.</p>
+<p>이 문제는 더 이상 가설이 아니다. 2026년 7월 과학기술정보통신부는 전 국민에게 무료·무제한 국산 AI 챗봇을 제공하고, 국민이 받을 수 있는 공공서비스를 미리 찾아 신청까지 대행하는 공공 AI 에이전트를 결합하는 ‘모두의 AI’ 프로젝트를 발표하였다. 정부가 직접 나선 배경에는 AI 활용 격차가 있다. 국민의 약 3분의 2가 AI를 경험하였고 생성형 AI 이용자는 2,300만 명에 이르지만, 약 3분의 1은 여전히 AI를 사용하지 못하며 이용자 상당수도 외산 무료 서비스에 의존한다. 정부는 외산 무료 서비스가 이용량 제약과 향후 구독료 인상·서비스 중단 등 정책 변화에 취약할 수 있다고 보았다.</p>
+<p>그러나 보편적 무료 보급이 격차를 자동으로 해소하지는 않는다. 성장률과 이용률만 최적화하면 평균 생산성은 오르면서도 중간층이 얇아지는 ‘정책 실패’가 가능하다. 본 연구의 핵심 질문은 다음과 같다. <b class='k'>“보편적 공공 AI 제공만으로 AI가 유발하는 경제 양극화를 완화할 수 있는가, 그렇지 않다면 어떤 정책 설계가 이를 가능하게 하는가?”</b> 본 연구는 이 질문에 산업통계로 보정한 계산실험으로 답한다. 본 논문은 이하에서 선행연구와 분석 방법(제1장), 산업통계 보정과 모형(제2장), 시뮬레이션 결과와 정책 함의(제3장) 순으로 논의한다.</p>
+
+<h4 class='sec'>2. 선행연구 검토</h4>
+<p>본 연구는 기술변화의 과업(task) 접근에 기초한다. 자동화는 노동을 특정 과업에서 대체하지만, 새로운 과업과 생산성 효과는 노동 수요를 재창출한다. Acemoglu와 Restrepo는 임금 불평등 변화의 상당 부분을 과업 대체와 차별적 노출로 설명한다. 다만 AI는 과거 자동화와 달리 고임금 인지직종이 높은 노출과 높은 보완성을 동시에 가질 수 있다는 점에서 특수하다. 국제통화기금(IMF)의 과업 기반 모형은 이러한 양면성이 대체를 통해 임금 불평등을 줄이면서도 자본수익과 내생적 채택을 통해 <b class='k'>부(富) 불평등을 확대</b>할 수 있음을 보인다. 본 연구는 이 모호성을 축약형으로 포착하여, 노출된 가구가 증강 이득, 대체 손실, 또는 둘 다를 받을 수 있게 한다.</p>
+<p>실증적으로는 생성형 AI가 저경력 고객상담 근로자의 생산성을 더 크게 높였다는 현장 연구가 보완적 채널의 존재를 시사한다. 이는 일반 법칙은 아니지만, 기술을 낮은 기저 역량에 더 큰 한계이득이 돌아가도록 <b class='k'>설계·배치</b>할 수 있음을 뜻한다. 본 연구는 이 가능성을 ‘보상적 설계’ 파라미터로 표현한다. 한편 공공재정 문헌은 AI 성장·대체·노동몫·자본소유에 대한 불확실성 하에서 점(点)최적 정책보다 강건한 정책이 바람직할 수 있음을 강조한다. Korinek과 Stiglitz는 AI의 분배적 결과가 기술 그 자체보다 소유권·시장구조·재정정책에 달려 있다고 본다. 이에 본 연구는 보편 접근뿐 아니라 AI 자본소득의 부분적 사회화를 함께 평가한다.</p>
+<p>한국에 관한 근거는 노출과 보완성의 구분을 더욱 뚜렷하게 한다. 한국은행은 취업자의 51%가 고노출 직종에 속하며, 이 중 24%p는 고노출·고보완, 27%p는 고노출·저보완으로 추정한다. 또한 대표 가구조사에서 생성형 AI 이용률 63.5%, 업무 이용 51.8%, 평균 업무시간 3.8% 감소를 보고하면서 강한 인구·직업별 기울기를 문서화한다. 초기 경력 고용은 정형 과업 자동화가 용이한 고노출 산업에서 더 크게 위축되었다는 연구도 있다. 이러한 사실은 연령별 대체와 직업 이동을 반영한 한국형 설정의 필요성을 시사한다. 방법론적으로 본 연구는 생성적(generative) 에이전트 기반 사회과학과, 상호작용하는 이질적 단위로부터 분배 규칙성을 도출하는 경제물리학(econophysics) 전통을 따르며, 투명한 검증을 중시한다.</p>
+<p>본 연구가 ‘불평등’이 아니라 ‘양극화’를 전면에 두는 이유도 측정 개념과 관련된다. 지니(Gini)계수는 분포 전반의 불평등을 요약하지만, 소득이 양극단으로 이동하며 중간층이 얇아지는 현상—즉 양극화—에는 둔감하다. 예컨대 상위·하위 집단이 동시에 커지고 중간층이 사라져도 지니계수는 크게 변하지 않을 수 있다. Wolfson 양극화 지수와 중위소득 대비 중간층 비중은 바로 이 ‘중간층의 공동화(hollowing-out)’를 포착한다. AI가 고임금·고역량층과 저임금·저역량층으로 노동시장을 분절시킬 수 있다는 우려를 정면으로 다루려면, 지니·앳킨슨(Atkinson)과 더불어 Wolfson·중간층 비중을 함께 보아야 한다. 본 연구는 이 다지표(multi-metric) 접근을 채택하고, 효율 측면에서는 총생산뿐 아니라 불평등을 조정한 균등분배 대등소득(EDE)을 별도로 보고한다. 이는 ‘평균은 오르지만 후생은 나빠지는’ 상황을 식별하기 위함이다.</p>
+
+<h4 class='sec'>3. 연구 방법과 분석 절차</h4>
+<p>본 연구는 세 단계로 구성된다. 첫째, 산업통계로 모형의 구조 파라미터를 직접 보정한다(제2장 1절). 임의의 가정 대신 실측치를 사용하는 것이 정책 시뮬레이션의 신뢰도를 좌우한다고 보았다. 둘째, 합성 인구를 표본으로 이질적 에이전트 시뮬레이션을 수행하여 시장 기준안과 다섯 개 공공 AI 정책조합을 비교한다(제2장 2절). 이때 모든 정책 비교는 동일한 초기 인구와 동일한 난수열을 공유하는 짝비교(common random numbers)로 수행하여, 정책 간 차이가 표본 변동이 아니라 정책 설계에서 비롯되도록 한다. 셋째, 결과의 강건성을 다각도로 검증한다(제3장). 구체적으로 40회 몬테카를로 반복의 95% 신뢰구간을 보고하고, 종합 정책안에서 각 요소(교육·돌봄·자본배당·보상적 설계)를 하나씩 제거하는 메커니즘 분해로 인과 경로를 분해하며, 표본크기 250·500·1,000·2,000에 대한 유한크기 스케일링으로 소표본 아티팩트 여부를 점검한다.</p>
+<p>본 연구의 모든 데이터는 통계표 식별자·출처·조회일을 기록하여 재현 가능하며, 데이터 수집→파라미터 보정→시뮬레이션→강건성 검증의 전 과정을 결정론적 스크립트로 공개한다. 인구 자료의 처리에는 개인 이름·서사 필드를 저장하지 않고 익명 집계만 사용하는 데이터 거버넌스 원칙을 적용하였고, 집계 산출물이 사전 정의된 스키마와 금지 필드 규칙을 통과하는지 자동 검증하였다. 끝으로 본 연구가 제시하는 수치는 모형 조건부 비교정학(comparative statics)이며, 특정 시점의 예측이나 인과효과 추정이 아님을 분명히 한다. 이러한 절제는 합성 인구와 축약형 가정을 사용하는 계산실험의 해석 범위를 지키기 위함이다.</p>
 """
 
 CH2 = f"""
 <h3 class='ch'>제2장 산업통계 기반 파라미터 보정과 모형</h3>
+
 <h4 class='sec'>1. 활용한 산업통계와 파라미터 보정</h4>
-<p>과거의 모형은 구조 파라미터를 가정으로 설정하였다. 본 연구는 그중 네 개를 통계청 KOSIS와 한국은행 ECOS의 OpenAPI에서 직접 수집한 공식 통계로 대체하였다. 사용한 계열과 보정 결과는 &lt;표 2-1&gt;과 같다.</p>
+<h5 class='sub'>(1) 자료의 수집과 재현 절차</h5>
+<p>본 연구는 산업연구원 ISTANS가 제공하는 산업통계 도메인, 즉 산업별 생산성·부가가치·고용의 구조를 분석의 축으로 삼는다. 동 도메인의 공식 통계를 재현 가능한 방식으로 확보하기 위해, 통계청 KOSIS와 한국은행 ECOS의 OpenAPI를 통해 관련 계열을 프로그램으로 수집하였다. 사용한 주요 계열은 (i) 산업별 취업자(경제활동인구조사), (ii) 산업별 노동생산성지수 및 제조업 지역별 노동생산성, (iii) 국민계정 기반 노동소득분배율이다. 각 계열은 조회 시점의 통계표 식별자·단위·기간과 함께 명세 파일에 기록하여, 동일 결과가 언제든 재현되도록 하였다. 이러한 절차는 정책 분석에서 흔히 문제가 되는 ‘출처 불명의 수치’를 배제하고, 심사·검증의 신뢰도를 높인다.</p>
+<p>각 계열의 성격과 활용은 다음과 같다. 첫째, 산업별 계절조정 취업자(KOSIS DT_1DA9003S)는 2013년 이후 월별로 21개 산업의 취업자 규모를 제공한다. 본 연구는 이를 연 단위로 집계한 뒤, 인접 연도 간 산업별 고용 구성비의 절대 변화를 합산한 값의 절반을 재배치율로 정의하였다. 이는 노동경제학에서 부문 간 일자리 재배치의 강도를 측정하는 표준적 방식에 상응한다. 둘째, 산업생산기준 노동생산성지수(KOSIS DT_344N_1D8A_AA)는 산업별 산출과 노동투입의 비율을 지수화한 것으로, 본 연구는 산업별 지수 증가율의 표준편차로 산업 간 생산성 격차를 요약하였다. 셋째, 제조업 지역별 노동생산성(KOSIS DT_344N_1D8B_DD)은 18개 시도의 제조업 부가가치 기반 생산성을 제공하며, 본 연구는 최신 연도의 상·하위 지역 격차로 지역 페널티를 산정하였다. 넷째, 국민계정 부문별 소득(ECOS 200Y116)에서 피용자보수와 요소비용국민소득을 취해 노동소득분배율을 계산하고, 그 여수를 자본소득 비중으로 사용하였다. 이처럼 네 파라미터는 서로 다른 독립적 공식 통계에서 산정되어, 단일 자료에 대한 과적합(over-fitting)의 우려를 줄인다.</p>
+<h5 class='sub'>(2) 파라미터 보정 결과와 세 가지 실증 사실</h5>
+<p>과거의 모형은 핵심 구조 파라미터를 가정으로 설정하였다. 본 연구는 그중 네 개를 공식 통계로 대체하였으며 그 결과는 &lt;표 2-1&gt;과 같다. 자본소득 비중 κ는 국민계정의 피용자보수를 요소비용국민소득으로 나눈 노동소득분배율의 여수(餘數)로, 직무 재배치 속도 ρ는 산업별 취업자 구성의 연간 절대 변화(재배치율)로, 산업 생산성 격차 ζ는 산업별 노동생산성 증가율의 표준편차로, 지역 페널티 ψ는 제조업 지역 노동생산성의 상·하위 격차로 각각 산정하였다.</p>
 <div class='capT'>&lt;표 2-1&gt; 산업통계 기반 파라미터 보정 결과</div>
 <table class='data'>
-<tr><th>파라미터</th><th>모형 의미</th><th>실측 앵커</th><th>값</th><th>출처(통계표)</th></tr>
-<tr><td>κ</td><td class='l'>AI 자본소득 비중</td><td class='l'>1 − 노동소득분배율(최근 5년)</td><td>0.327</td><td>ECOS 200Y116</td></tr>
-<tr><td>ρ</td><td class='l'>직무 재배치 속도</td><td class='l'>산업 간 취업자 연평균 재배치</td><td>0.0136</td><td>KOSIS DT_1DA9003S</td></tr>
+<tr><th>파라미터</th><th>모형에서의 의미</th><th>실측 앵커(산정식)</th><th>값</th><th>출처(통계표)</th></tr>
+<tr><td>κ</td><td class='l'>AI 자본소득 비중</td><td class='l'>1 − 노동소득분배율(최근 5년 평균)</td><td>0.327</td><td>ECOS 200Y116</td></tr>
+<tr><td>ρ</td><td class='l'>직무 재배치 속도</td><td class='l'>산업 간 취업자 연평균 절대 재배치</td><td>0.0136</td><td>KOSIS DT_1DA9003S</td></tr>
 <tr><td>ζ</td><td class='l'>산업 생산성 격차</td><td class='l'>산업 노동생산성 증가율 표준편차</td><td>0.115</td><td>KOSIS DT_344N_1D8A_AA</td></tr>
-<tr><td>ψ</td><td class='l'>지역 페널티</td><td class='l'>제조업 상·하위 지역 생산성 격차</td><td>0.569</td><td>KOSIS DT_344N_1D8B_DD</td></tr>
+<tr><td>ψ</td><td class='l'>지역 실효접근 페널티</td><td class='l'>제조업 상·하위 지역 생산성 격차</td><td>0.569</td><td>KOSIS DT_344N_1D8B_DD</td></tr>
 </table>
-<p class='src'>자료: 통계청 KOSIS, 한국은행 ECOS OpenAPI. 각 계열의 통계표 ID·조회일은 재현 저장소의 MANIFEST에 기록.</p>
-<p>세 가지 사실이 모형을 규율한다. 첫째, <b class='k'>노동소득분배율은 2015년 62.3%에서 2024년 67.4%로 상승</b>하여 자본소득 비중은 약 3분의 1이다. 둘째, <b class='k'>산업 간 관측 재배치는 연 1.4%로 종전 가정치(4.5%)보다 낮다.</b> 이는 대격변 서사를 완화하는 동시에, AI가 이 느린 재배치를 가속하면 미지의 영역으로 진입할 수 있음을 경고한다. 셋째, <b class='k'>제조업 지역 생산성 격차는 상·하위 약 57%</b>로, 보편 접근이 균등화하지 못하는 지역 효과의 실증적 근거가 된다.</p>
+<p class='src'>자료: 통계청 KOSIS, 한국은행 ECOS OpenAPI(조회일: 2026. 8. 29). 통계표 ID·조회일은 재현 저장소 명세에 기록.</p>
+<p>이 보정에서 세 가지 실증 사실이 도출된다. 첫째, <b class='k'>노동소득분배율은 2015년 62.3%에서 2024년 67.4%로 상승</b>하여, 자본소득 비중은 약 3분의 1 수준이다. 이는 자본 채널이 실재하되 노동 채널을 압도하지는 않음을 뜻하며, 모형에서 자본수익이 부의 집중에는 크게, 양극화 지수에는 상대적으로 작게 작용한다는 결과와 정합한다. 둘째, <b class='k'>산업 간 관측 재배치는 연 1.4%(ρ=0.0136)로 종전 가정치(4.5%)보다 현저히 낮다.</b> 이는 국가 총량 수준에서 한국의 산업 간 노동 재편이 느리게 진행되었음을 보여주며, 대격변 서사를 완화하는 동시에 AI가 이 느린 재배치를 가속할 경우 모형이 미지의 영역으로 진입한다는 경고를 담는다. 셋째, <b class='k'>제조업 지역 노동생산성은 상·하위 약 57%(ψ=0.569)의 격차</b>를 보인다. 이는 보편적 명목 접근이 균등화하지 못하는 지역 효과—조직·자본 맥락의 차이—를 실효 접근 페널티로 모형화할 실증적 근거가 된다.</p>
 
-<h4 class='sec'>2. 이질적 에이전트 모형과 정책 시나리오</h4>
-<p>가구는 노동소득·AI 인적자본·AI 보완자본·직업 노출·유연성·돌봄부담·취약성·초기자원 순위를 상태로 갖는다. 분석의 핵심은 <b class='k'>실효 AI 서비스</b>가 명목 접근이 아니라 품질·숙련·유연성의 함수라는 점이다. 즉 실효 서비스는 품질과 (숙련·유연성의 로지스틱 변환)의 곱으로 정의되어, 보편적 명목 접근이 숙련·유연성 불평등을 균등화하지 못함을 나타낸다. AI 자본소득은 자본·노출·실효서비스에 비례하며, 정부는 자본소득 일부를 누진 가중치로 재분배하되 예산 항등식을 강제한다.</p>
-<p>인구의 인구학적 구조는 공개 합성 페르소나(연령×성별×지역×교육×직업의 3,405개 익명 층화)에서 취하되, 개인 이름·서사 필드를 제거하고 집계만 사용하며 실제 국민 표본으로 해석하지 않는다. 교육수준은 기초 숙련으로, 직업은 AI 노출·보완성으로, 지역은 실효접근 용량(제조업 지역 생산성 기반)으로 사상한다. 비교 대상 정책은 ① 시장·프리미엄 AI(기준), ② 전국민 공공 AI, ③ 공공 AI+공교육, ④ 공공 AI+돌봄, ⑤ 공공 AI 종합안(접근·교육·돌봄·자본배당·근로자소유), ⑥ 저품질 공공 AI의 여섯이다.</p>
+<h4 class='sec'>2. 이질적 에이전트 모형</h4>
+<h5 class='sub'>(1) 상태변수와 실효 AI 서비스</h5>
+<p>모형의 경제는 다수의 이질적 가구로 구성되며, 각 가구는 노동소득, AI 관련 인적자본(숙련), AI 보완 자본, 직업 AI 노출도, 직업 유연성, 돌봄·행정 부담, 취약성, 초기 자원 순위를 상태로 갖는다. 초기 노동소득과 자본은 초기 자원 상태와 양의 상관을 갖는 로그정규 분포로, 숙련과 유연성은 같은 상태와 상관을 갖되 고유 변동을 유지하도록 생성한다. 분석의 핵심은 <b class='k'>명목 접근과 실효 이용의 구분</b>이다. 즉 계정을 여는 것(명목 접근)과 그것을 생산성으로 전환하는 것(실효 이용)은 다르다.</p>
+<p>실효 AI 서비스는 AI 품질과 숙련·유연성의 로지스틱 변환의 곱으로 정의된다. 품질은 프리미엄 채택 여부, 공공 접근 성공 여부, 잔여 저품질 여부에 따라 결정되며, 공공 접근 성공 확률은 명목 보급률과 기관·가구 신뢰의 곱으로 주어진다. 이 구조에서 보편적 명목 접근은 비(非)프리미엄 가구의 접근 격차만 없앨 뿐, 프리미엄 품질과 숙련의 기울기를 그대로 남긴다. 따라서 <b class='k'>보편 접근은 실효 서비스의 자원 기울기를 일반적으로 제거하지 못한다</b>(제3장 및 부록의 명제 1). 이는 본 연구의 이론적 출발점이자, 시뮬레이션 결과의 직관적 근거이다.</p>
+<h5 class='sub'>(2) 노동·자본·재분배 동학과 정책 시나리오</h5>
+<p>노동소득 증가율은 보완적 증강(노출×실효서비스×숙련), 보상적 설계(저역량·저자원층에 더 큰 한계이득), 직무 대체(노출×적응 부족), 돌봄에 따른 취약계층 고용 회복, 그리고 이전 성장의 동학 피드백으로 구성된다. 공교육은 저자원·저숙련 가구에 더 집중되는 누진적 인적자본 전이로 모형화된다. AI 자본소득은 자본·노출·실효서비스에 비례하며, 정부는 자본소득의 일부를 과세하여 초기 자원이 낮은 가구에 더 큰 가중치로 환류한다. 이때 각 가구의 자본 스톡은 초기 AI 자본소득 비중이 실측 κ=0.327과 일치하도록 스케일된다. 모든 정책에서 재분배 예산 항등식이 강제되며(예산오차 10⁻¹⁰ 미만), 공공 서비스 제공에는 별도의 실물 자원 비용이 부과되어 순생산과 순후생 계산에서 차감된다.</p>
+<p>동학의 각 항은 서로 다른 정책 지렛대에 대응한다. 보완적 증강 항은 실효 서비스가 클수록, 숙련이 높을수록 커지므로 접근·품질과 인적자본에 함께 반응한다. 보상적 설계 항은 공공 접근에 성공한 저숙련·저자원 가구에 더 큰 한계이득을 주도록 설계되어, 기술을 ‘낮은 기저 역량에 유리하게’ 배치할 수 있는지를 검증한다. 직무 대체 항은 노출이 높고 적응(숙련·유연성·실효서비스의 함수)이 낮을수록 커진다. 적응이 대체를 상쇄하지 못하면 노출은 손실로 귀결된다. 자본 측면에서 각 가구의 자본은 감가상각, 세후 이윤의 재투자, 양(陽)의 노동이득 일부, 그리고 근로자소유 지분을 통해 축적된다. 정부는 자본소득의 일정 비율을 과세해 초기 자원이 낮은 가구에 더 큰 가중치로 배당하되, 배당 총액이 세수와 일치하도록 예산 항등식을 강제한다. 공공 제공의 실물 비용은 보급률·품질·교육·돌봄·소유 강도의 함수로 별도 부과되어, 몬테카를로에서 조달 효율의 불확실성을 반영하는 비용 승수와 함께 순생산·순후생에서 차감된다. 이로써 ‘분배는 개선하지만 비용이 커 순생산이 감소하는’ 경우가 결과에 정직하게 반영된다.</p>
+<p>비교 대상 정책은 여섯이다. ① <b class='k'>시장·프리미엄 AI</b>(기준): 잔여 저품질 접근과 자원 편중적 프리미엄 채택. ② <b class='k'>전국민 공공 AI</b>: 높은 명목 보급과 중간 수준 공공 품질. ③ <b class='k'>공공 AI+공교육</b>: 누진적 인적자본 투자 결합. ④ <b class='k'>공공 AI+돌봄</b>: 돌봄·행정 부담의 표적 경감. ⑤ <b class='k'>공공 AI 종합안</b>: 접근·교육·돌봄·AI 자본배당·근로자소유의 결합. ⑥ <b class='k'>저품질 공공 AI</b>: 넓은 명목 보급이나 낮은 품질·신뢰의 실패 사례. 분배 성과는 Gini, Atkinson(불평등 회피 ε=1), Wolfson 양극화, 중위소득 75~125% 구간의 중간층 비중, 균등분배 대등소득(EDE), 취약계층 고용, 상위 10% AI 자본 몫으로 측정한다. 특히 Wolfson 양극화와 중간층 비중은 Gini가 놓치는 ‘중간층의 얇아짐’을 포착하기 위해 함께 보고한다.</p>
 """
 
 CH3 = f"""
 <h3 class='ch'>제3장 시뮬레이션 분석 결과와 정책 함의</h3>
+
 <h4 class='sec'>1. 실인구 시뮬레이션 결과</h4>
 <h5 class='sub'>(1) 정책별 분배·고용 효과</h5>
-<p>24개 시드·6개 정책(144회 짝비교, 15기)에서 정책 순위는 유지되되 수준이 유의미하게 이동한다(&lt;표 3-1&gt;). 실측된 낮은 재배치율에도 <b class='k'>모든 정책에서 양극화(Wolfson 지수)가 상승</b>한다. 동인은 재배치 속도가 아니라 실제 인구가 지닌 교육–직업–자본 격차다.</p>
+<p>합성 인구(연령×성별×지역×교육×직업의 익명 층화)를 표본으로, 24개 시드·6개 정책(144회 짝비교, 15기)에 대해 기준 결과를 산출하였다(&lt;표 3-1&gt;). 가장 눈에 띄는 결과는, 산업통계로 보정한 낮은 재배치율에도 불구하고 <b class='k'>모든 정책에서 양극화(Wolfson 지수)가 상승</b>한다는 점이다. 이는 양극화의 동인이 재배치의 ‘속도’가 아니라 실제 인구가 지닌 교육–직업–자본의 격차 구조임을 의미한다. 무료 접근이 확대되어도, 프리미엄 품질·숙련·자본 소유가 초기 자원과 함께 집중되어 있는 한 경제적 수익의 주된 기울기는 그대로 남는다.</p>
 <div class='capT'>&lt;표 3-1&gt; 정책 시나리오별 분배·고용 효과(실인구, 40시드 95% 신뢰구간)</div>
 <table class='data'>
-<tr><th>정책</th><th>Δ Wolfson</th><th>95% CI</th><th>Δ 취약계층 고용</th></tr>
+<tr><th>정책</th><th>Δ Wolfson</th><th>95% 신뢰구간</th><th>Δ 취약계층 고용</th></tr>
 <tr><td class='l'>시장·프리미엄 AI(기준)</td><td>0.1915</td><td>[0.187, 0.196]</td><td>−0.2%p</td></tr>
 <tr><td class='l'>전국민 공공 AI</td><td>0.1903</td><td>[0.186, 0.194]</td><td>−0.2%p</td></tr>
 <tr><td class='l'>공공 AI + 공교육</td><td>0.1943</td><td>[0.190, 0.198]</td><td>+2.5%p</td></tr>
@@ -144,13 +193,18 @@ CH3 = f"""
 <tr><td class='l'><b>공공 AI 종합안</b></td><td><b>0.1639</b></td><td><b>[0.161, 0.167]</b></td><td><b>+5.9%p</b></td></tr>
 <tr><td class='l'>저품질 공공 AI</td><td>0.1924</td><td>[0.188, 0.197]</td><td>+1.6%p</td></tr>
 </table>
-<p><b class='k'>종합안만이 양극화를 유의하게 완화</b>한다. 시장 대비 감소분은 +0.0275, 95% 신뢰구간 [0.0252, 0.0298]로 0을 배제한다. 종합안은 취약계층 고용을 5%p 이상 높이는 유일한 안이기도 하다.</p>
+<p><b class='k'>여섯 정책 중 종합안만이 양극화를 유의하게 완화</b>한다. 시장 대비 감소분은 +0.0275, 95% 신뢰구간 [0.0252, 0.0298]로 0을 배제하며, 이는 짝비교로 표본 변동을 통제한 결과이다. 종합안은 또한 취약계층 고용을 5%p 이상 높이는 유일한 안이다. &lt;그림 3-1&gt;의 효율–양극화 프런티어에서 종합안은 취약계층 고용을 키우면서 양극화를 낮추는 위치를 점한다. 반면 접근만 확대하는 전국민 공공 AI는 취약계층 고용을 오히려 소폭 낮추는데, 이는 접근 확대가 상대적으로 준비된 계층에 먼저 이득을 주기 때문이다.</p>
 <div class='capF'>&lt;그림 3-1&gt; 효율–양극화 정책 프런티어</div>
 <img class='fig' src='{FIG_FRONTIER}'/>
-<p class='src'>주: 점 크기는 취약계층 고용 개선폭. 종합안이 고용을 키우며 양극화를 낮추는 위치에 있다.</p>
+<p class='src'>주: 가로축은 평균소득 변화, 세로축은 Δ Wolfson, 점 크기는 취약계층 고용 개선폭.</p>
+<p>정책 동학을 시점별로 보면(&lt;그림 3-2&gt;), 시장 기준안은 양극화와 상위 10% AI 자본 몫이 가장 빠르게 상승한다. 공교육과 종합안은 저자원층을 겨냥한 역량 투자를 통해 역량 격차를 크게 줄이며, 종합안은 누진 배당과 소유 이전을 통해 자본 집중의 속도까지 늦춘다. 초기 자원 5분위별 소득 변화(&lt;그림 3-3&gt;)에서도 모든 현실적 정책이 양(陽)의 자원 기울기를 유지하여 상위 분위가 가장 큰 이득을 얻지만, 공교육과 종합안은 소득 변화의 전체 스케줄을 상방 이동시킨다. 다만 그 기울기의 부호를 뒤집지는 못한다. 즉 AI는 평균 생산성을 높이면서 동시에 분배적 분절을 심화시킬 수 있다.</p>
+<div class='capF'>&lt;그림 3-2&gt; 정책조합별 분배 동학</div>
+<img class='fig' src='{FIG_DYN}'/>
+<div class='capF'>&lt;그림 3-3&gt; 초기 자원 5분위별 소득 변화</div>
+<img class='fig' src='{FIG_QUINT}'/>
 
 <h5 class='sub'>(2) 강건성: 신뢰구간·메커니즘 분해·표본크기</h5>
-<p>거버넌스 검증(금지 서사 필드 없음)을 통과한 프로필에서 강건성을 확인하였다. 짝지은 몬테카를로에서 모든 정책의 Δ Wolfson 신뢰구간이 0을 초과하여(가설 H1 확증), 보편 접근만으로 양극화가 역전되지 않음을 보인다. 메커니즘 제거 실험(&lt;표 3-2&gt;)은 <b class='k'>양극화와 고용이 서로 다른 지렛대로 움직임</b>을 드러낸다.</p>
+<p>결과의 신뢰성을 확보하기 위해 세 가지 검증을 수행하였다. 첫째, 40회 짝지은 몬테카를로에서 <b class='k'>모든 정책의 Δ Wolfson 95% 신뢰구간이 0을 초과</b>한다. 이는 “보편 접근만으로는 양극화가 역전되지 않는다”는 가설을 확증한다. 둘째, 종합안에서 각 요소를 하나씩 제거하는 메커니즘 분해(&lt;표 3-2&gt;)는 <b class='k'>양극화와 고용이 서로 다른 지렛대로 움직임</b>을 드러낸다.</p>
 <div class='capT'>&lt;표 3-2&gt; 종합안 메커니즘 제거(ablation) 분해</div>
 <table class='data'>
 <tr><th>종합안에서 제거한 요소</th><th>Δ Wolfson</th><th>Δ 취약계층 고용</th></tr>
@@ -160,42 +214,67 @@ CH3 = f"""
 <tr><td class='l'>− 공교육</td><td>0.1607</td><td>+3.2%p</td></tr>
 <tr><td class='l'>− 보상적 설계</td><td>0.1643</td><td>+5.9%p</td></tr>
 </table>
-<p>자본소유·배당 환류를 제거하면 양극화가 가장 크게 악화(0.164→0.190)되어 <b class='k'>AI 자본소유의 광범위화가 양극화 완화의 주력 메커니즘</b>임을 보인다. 반면 교육·돌봄 제거는 취약계층 고용 개선을 절반가량 줄이면서 양극화는 거의 바꾸지 않아, <b class='k'>교육·돌봄이 고용 포용의 주력 메커니즘</b>임을 보인다. 나아가 시장 대 종합안의 순서는 표본크기 250~2,000에서 안정적이어서 소표본 아티팩트가 아니다.</p>
+<p>자본소유·배당 환류를 제거하면 양극화가 가장 크게 악화(0.164→0.190)된다. 따라서 <b class='k'>AI 자본소유의 광범위화가 양극화 완화의 주력 메커니즘</b>이다. 반면 교육이나 돌봄을 제거하면 취약계층 고용 개선폭이 절반가량으로 줄지만 양극화는 거의 바뀌지 않는다. 즉 <b class='k'>교육·돌봄은 고용 포용의 주력 메커니즘</b>이다. 이는 “교육이 핵심”이라는 통상적 진술을 두 채널로 정교화한다. 셋째, 표본크기 스케일링(&lt;표 3-3&gt;)에서 시장 대 종합안의 순서는 250~2,000의 모든 크기에서 안정적으로 유지되며 격차가 소멸하지 않는다. 따라서 본 결과는 소표본 아티팩트가 아니다.</p>
+<p>이 세 검증을 종합하면 하나의 일관된 메커니즘 그림이 나타난다. 자본소유 환류가 양극화의 결정적 지렛대인 까닭은, 실측 자료가 보여주듯 자본소득 비중이 약 3분의 1로 실재하며 AI 자본수익이 초기 자원과 강하게 상관하기 때문이다. 접근·교육을 확대해도 노동 채널만 움직일 뿐, 자본 채널을 건드리지 않으면 상위층의 자본소득이 계속 벌어져 총분배는 개선되지 않는다. 반대로 취약계층 고용은 자본이 아니라 역량·시간 제약에 묶여 있으므로, 교육과 돌봄이 그 제약을 풀 때 개선된다. 두 목표(분배 압축과 고용 포용)가 서로 다른 지렛대에 반응한다는 이 발견은, 단일 수단(예: 무료 접근)으로 두 목표를 동시에 달성하려는 정책 설계가 왜 실패하기 쉬운지를 설명한다. 요컨대 정책은 ‘묶음(package)’이어야 하며, 그 묶음 안에서 자본소유와 인적자본 투자가 각자의 역할을 나눠 맡아야 한다.</p>
+<div class='capT'>&lt;표 3-3&gt; 표본크기별 Δ Wolfson(유한크기 스케일링)</div>
+<table class='data'>
+<tr><th>표본크기 n</th><th>시장·프리미엄 AI</th><th>공공 AI 종합안</th></tr>
+<tr><td>250</td><td>0.207</td><td>0.176</td></tr>
+<tr><td>500</td><td>0.199</td><td>0.169</td></tr>
+<tr><td>1,000</td><td>0.193</td><td>0.163</td></tr>
+<tr><td>2,000</td><td>0.191</td><td>0.165</td></tr>
+</table>
 
-<h4 class='sec'>2. 정책 논의와 결론</h4>
+<h4 class='sec'>2. 정책 논의</h4>
 <h5 class='sub'>(1) ‘모두의 AI’ 설계 제언</h5>
-<p>본 분석은 진행 중인 국가정책에 직접 적용된다. ‘AI 미사용 3분의 1’은 저학력·비경제활동 계층과 겹치며, 이들에게 무료 챗봇만으로는 순후생이 오르지 않았다. 따라서 성패는 챗봇 출시가 아니라 보상적 설계에 달려 있다. 구체적으로 (i) 저역량층 우선 <b class='k'>AI 활용 공교육</b>(수료가 아니라 무보조 재현역량으로 측정), (ii) <b class='k'>돌봄·행정 부담 경감</b>으로 학습·구직 시간 확보, (iii) 연금·근로자 지분·지역 컴퓨트 기금 등 <b class='k'>시민의 AI 자본 청구권</b> 확대를 결합해야 한다. 정책 평가 지표도 이용률이 아니라 양극화·역량격차·취약계층 고용·권리의 공동 통과조건으로 전환할 것을 제언한다.</p>
-<h5 class='sub'>(2) 한계와 결론</h5>
-<p>본 모형은 부분균형이며 임금·가격이 균형에서 청산되지 않고, 정책 품질·신뢰는 가정이며, 합성 인구의 결합분포 대표성은 감사되지 않았다. 따라서 본 연구는 이론 보조 정책 설계로 읽혀야 하며 실제 프로그램을 서열화하지 않는다. 그럼에도 <b class='k'>공식 산업통계로 파라미터를 보정</b>했을 때에도 “보편 접근만으로는 양극화를 되돌리지 못하고, 자본소유·교육·돌봄의 결합이 필요하다”는 결론이 강건하게 유지된다는 점은 정책적으로 유의미하다. 산업통계를 정책 시뮬레이션의 파라미터로 직접 활용하는 본 접근은, 예산 투입 전에 실패 조합을 식별하고 산업통계의 정책 활용도를 높이는 방법을 제시한다.</p>
+<p>본 분석은 진행 중인 국가정책에 직접 적용된다. 산업통계와 인구 구조로 확인된 ‘AI 미사용 3분의 1’은 저학력·비경제활동 계층과 상당히 겹치며, 모형에서 이들은 무료 챗봇만으로는 순후생(EDE)이 오히려 음(−)이 되는 집단이다. 따라서 ‘모두의 AI’의 성패는 챗봇 출시 자체가 아니라 <b class='k'>보상적 설계</b>에 달려 있다. 첫째, 저역량층을 우선하는 AI 활용 공교육을 두되, 성과를 수료율이 아니라 AI 없이도 과업을 수행할 수 있는 ‘무보조 재현역량’으로 측정해야 한다. 둘째, 돌봄·행정 부담을 경감하여 학습과 구직에 쓸 시간을 확보해야 한다. 셋째, 연금·근로자 지분·지역 컴퓨트 기금 등 시민이 AI 자본에 대한 청구권을 갖도록 소유 구조를 확대해야 한다. 본 연구의 분해 결과는 특히 세 번째, 즉 자본소유 환류가 양극화 완화에 결정적임을 보인다. 넷째, 정책 평가 지표를 이용률에서 <b class='k'>분배·전환·권리 지표</b>(양극화, 역량격차, 취약계층 고용, 데이터·모델선택·인간개입·공급자 전환의 권리)로 전환해야 한다.</p>
+<p>이러한 제언은 ‘모두의 AI’의 제도 설계와도 부합한다. 공공 AI는 단일 국가모델에 종속되기보다, 인증된 공공·민간·오픈웨이트·온디바이스 모델 사이의 선택권과 상호운용성, 그리고 민감정보에 대한 프라이버시 보호를 보장하는 ‘권리’로 설계되는 편이 정권 교체에도 견고하다. 본 사업이 국산 모델 활용 비중과 이용자 수를 핵심 성과로 삼기 쉬운 구조임을 고려하면, 본 연구의 결과는 성과지표의 무게중심을 옮길 근거를 제공한다. 즉 ‘얼마나 많이 쓰는가’가 아니라 ‘누가 실제로 역량과 소득을 얻고 누가 뒤처지는가’를 물어야 한다. 무료 보급이 접근 격차를 줄이는 것은 분명한 성과지만, 그것이 곧 분배 개선을 뜻하지는 않는다는 점을 사전에 인식하고, 교육·돌봄·자본소유를 함께 설계하는 것이 정책 실패를 예방하는 길이다. 본 연구의 방법은 이러한 설계 대안을 예산 투입 전에 저비용으로 시험하는 ‘정책 디지털 트윈’으로 기능할 수 있다.</p>
+<h5 class='sub'>(2) 산업통계 활용성 제고 방안</h5>
+<p>본 연구의 방법은 산업통계를 정책 시뮬레이션의 파라미터로 직접 활용하는 것으로, 예산 투입 전에 실패 조합을 식별하는 데 유용하다. 이 경험에서 ISTANS 산업통계의 이용 편의성·활용성을 높이기 위한 제언을 도출한다. 첫째, 통계청 KOSIS·한국은행 ECOS처럼 인증키 기반 OpenAPI와 통계표 식별자 체계를 제공하면 산업통계를 코드로 재현 가능하게 수집·인용할 수 있다. 둘째, 산업×지역×연도의 다차원 결합 시계열을 셀 수 제한 없이 CSV·JSON으로 일괄 추출하는 기능이 필요하다. 셋째, 각 계열의 단위·산정식·기준연도·개정이력을 기계판독 가능한 메타데이터로 병기하고, 통계표별 영구 식별자와 조회일 스냅샷을 제공하면 학술·정책 인용의 추적성이 확보된다. 넷째, 대표 산업통계 활용 코드(파라미터 추정·시각화)를 공식 예제로 배포하면 활용의 진입장벽이 낮아진다.</p>
+
+<h4 class='sec'>3. 한계와 결론</h4>
+<p>본 연구는 여러 한계를 갖는다. 부분균형 전이 모형으로 임금·가격·기업 진입·총저축이 균형에서 청산되지 않는다. 프리미엄 채택은 가격에 반응하는 선택이 아니라 초기 자원의 축약형 함수이며, 공공 서비스 비용은 완전한 정부예산이 아닌 정규화된 실물 비용이다. 정책 품질·신뢰·표적은 추정이 아니라 가정이며, 합성 인구는 주변분포에 정렬되어 있으나 결합분포의 대표성은 감사되지 않았다. 네트워크 위상, 이력현상, 전역 민감도 분석은 후속 과제로 남긴다. 따라서 본 연구는 실제 프로그램을 서열화하지 않으며, 이론을 보조하는 정책 설계 도구로 읽혀야 한다.</p>
+<p>그럼에도 결론은 강건하다. 보편적 공공 AI는 1차 접근 격차를 없애지만, 프리미엄 품질·숙련·조직 유연성·AI 자본소유가 초기 자원과 양의 상관을 갖는 한, 보편적 계정 하나로 경제적 수익의 주된 기울기를 없앨 수 없다. 공식 산업통계로 파라미터를 보정했을 때에도 이 결론은 유지되며, 오히려 실제 한국 인구의 무직·저학력 대량 때문에 강화된다. 가장 강건한 개입은 접근 단독이 아니라 접근과 적응형 교육의 결합이고, 종합안이 가장 큰 분배 개선과 취약계층 고용 효과를 낸다. 양극화 완화의 결정적 지렛대는 AI 자본소유의 광범위화이다. 요컨대 정책 목표는 더 값싼 챗봇이 아니라, 초기 열위 사용자의 역량·시간·교섭력·자본 청구권을 높이는 공공 AI가 되어야 한다.</p>
 """
 
 REFS = """
 <h3 class='ch'>참고문헌</h3>
 <div class='refs'>
+<p>과학기술정보통신부(2026), “‘모두의 AI’ 프로젝트 추진계획”, 보도자료, 7월.</p>
 <p>한국은행(2025), 「인공지능의 노동시장 및 생산성 파급 효과」, 한국은행.</p>
-<p>과학기술정보통신부(2026), “‘모두의 AI’ 프로젝트 추진계획”, 6월.</p>
-<p>산업연구원, ISTANS 산업통계분석시스템, https://www.istans.or.kr(접속일: 2026. 8. 29).</p>
-<p>Acemoglu, D. and P. Restrepo(2021), “Tasks, Automation, and the Rise in U.S. Wage Inequality”, <i>Econometrica</i>, Econometric Society.</p>
+<p>Acemoglu, D. and P. Restrepo(2021), “Tasks, Automation, and the Rise in U.S. Wage Inequality”, <i>Econometrica</i>, 90(5), Econometric Society, pp. 1973-2016.</p>
 <p>Autor, D.(2015), “Why Are There Still So Many Jobs? The History and Future of Workplace Automation”, <i>Journal of Economic Perspectives</i>, 29(3), American Economic Association, pp. 3-30.</p>
-<p>Brynjolfsson, E., D. Li, and L. Raymond(2023), “Generative AI at Work”, NBER Working Paper.</p>
-<p>Korinek, A. and J. Stiglitz(2019), “Artificial Intelligence and Its Implications for Income Distribution and Unemployment”, in <i>The Economics of Artificial Intelligence</i>, University of Chicago Press.</p>
-<p>Rockall, E. et al.(2025), <i>The Labor Market Impact of Artificial Intelligence</i>, International Monetary Fund.</p>
-<p>OECD(2026), <i>Government at a Glance: AI</i>, OECD Publishing.</p>
+<p>Brynjolfsson, E., D. Li, and L. R. Raymond(2023), “Generative AI at Work”, NBER Working Paper No. 31161, National Bureau of Economic Research.</p>
+<p>Epstein, J. M.(1999), “Agent-Based Computational Models and Generative Social Science”, <i>Complexity</i>, 4(5), Wiley, pp. 41-60.</p>
+<p>Korinek, A. and J. E. Stiglitz(2019), “Artificial Intelligence and Its Implications for Income Distribution and Unemployment”, in <i>The Economics of Artificial Intelligence: An Agenda</i>, University of Chicago Press, pp. 349-390.</p>
+<p>Rockall, E., D. Pizzinelli, and M. Cazzaniga(2025), <i>The Labor Market Impact of Artificial Intelligence: Evidence and Simulations</i>, International Monetary Fund.</p>
+<p>OECD(2026), <i>Government at a Glance: Artificial Intelligence in the Public Sector</i>, Paris: OECD Publishing.</p>
+<p>산업연구원, ISTANS 산업통계분석시스템, https://www.istans.or.kr(접속일: 2026. 8. 29).</p>
 <p>통계청, KOSIS 국가통계포털 OpenAPI, https://kosis.kr(접속일: 2026. 8. 29).</p>
 <p>한국은행, ECOS 경제통계시스템 OpenAPI, https://ecos.bok.or.kr(접속일: 2026. 8. 29).</p>
-<p>NVIDIA(2026), Nemotron-Personas-Korea Dataset (CC BY 4.0), https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea(접속일: 2026. 8. 29).</p>
+<p>NVIDIA(2026), Nemotron-Personas-Korea Dataset(CC BY 4.0), https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea(접속일: 2026. 8. 29).</p>
 </div>
-<p class='src' style='margin-top:4mm'>※ 재현 코드·데이터·인터랙티브 시뮬레이터: https://github.com/waterfirst/public-ai-inequality-economics · https://waterfirst.github.io/public-ai-inequality-economics/</p>
 """
 
-HTML = f"<!doctype html><html><head><meta charset='utf-8'>{CSS}</head><body>{COVER}{SUMMARY}<div class='pagebreak'></div>{TOC}<div class='pagebreak'></div>{CH1}{CH2}{CH3}{REFS}</body></html>"
+APPENDIX = """
+<h3 class='ch'>부록: 재현성 명세 및 명제</h3>
+<h4 class='sec'>부록 A. 재현 절차와 코드</h4>
+<p>본 연구의 전 과정은 결정론적 스크립트로 공개된다. (1) 데이터 수집(KOSIS·ECOS OpenAPI, 통계표 ID·조회일 기록), (2) 파라미터 보정, (3) 실인구 시뮬레이션, (4) 강건성(짝지은 몬테카를로·메커니즘 분해·유한크기) 순으로 실행하면 본문의 표·그림이 재현된다. 인터랙티브 정책 시뮬레이터와 전체 저장소는 아래에서 확인할 수 있다.</p>
+<p class='src'>· 재현 저장소: https://github.com/waterfirst/public-ai-inequality-economics<br>· 인터랙티브 시뮬레이터: https://waterfirst.github.io/public-ai-inequality-economics/</p>
+<h4 class='sec'>부록 B. 비교정학 명제(요약)</h4>
+<p><b class='k'>명제 1.</b> 프리미엄 채택과 숙련이 초기 자원에 증가하고 AI가 숙련 보완적이며 프리미엄 품질이 공공 품질을 상회하면, 공공 명목 보급률을 1로 두어도 AI 증강의 자원 기울기는 일반적으로 제거되지 않는다.</p>
+<p><b class='k'>명제 2.</b> 대체·자본 채널을 고정할 때, 보상적 설계 강도에 임계값이 존재하여 그 위에서 노동 증강의 자원 기울기가 비양(非陽)이 된다. 다만 이는 노동 증강에 관한 것으로, 불평등한 자본 소유는 전체 양극화를 존속시킬 수 있다.</p>
+<p><b class='k'>명제 3.</b> 돌봄 부담이 고용을 낮추고 공공 돌봄이 그 부담을 약하게라도 낮추면, AI 돌봄은 취약계층의 고용을 약하게 높인다.</p>
+<p><b class='k'>명제 4.</b> 공공 옵션은 순생산을 낮추면서도 양극화를 낮출 수 있다. 공공 제공의 실물 비용이 총생산 증가를 초과하는 경우가 그러하며, 이는 양극화·총생산·순생산·순후생을 분리해 보고해야 하는 이유이다.</p>
+"""
+
+HTML = f"<!doctype html><html><head><meta charset='utf-8'>{CSS}</head><body>{COVER}{TITLEBLOCK}{SUMMARY}<div class='pagebreak'></div>{TOC}<div class='pagebreak'></div>{CH1}{CH2}{CH3}{REFS}{APPENDIX}</body></html>"
 
 path = os.path.join(OUT, "ISTANS_논문경진대회_논문_최낙초.pdf")
 with sync_playwright() as p:
     b = p.chromium.launch(headless=True); pg = b.new_page()
-    pg.set_content(HTML, wait_until="networkidle"); pg.wait_for_timeout(800)
+    pg.set_content(HTML, wait_until="networkidle"); pg.wait_for_timeout(900)
     pg.pdf(path=path, format="A4", print_background=True,
-           margin={"top":"20mm","bottom":"18mm","left":"20mm","right":"20mm"},
-           display_header_footer=False)
+           margin={"top":"20mm","bottom":"20mm","left":"30mm","right":"30mm"})
     b.close()
 print("wrote", path)
